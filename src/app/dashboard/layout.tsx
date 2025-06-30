@@ -19,7 +19,15 @@ import {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState('dashboard')
+  const [activeTab, setActiveTab] = useState('')
+
+  useEffect(() => {
+    const path = window.location.pathname
+    const currentTab = sidebarItems.find(item => 
+      path === item.href || (item.children?.some(child => path === child.href))
+    )?.id || ''
+    setActiveTab(currentTab)
+  }, [])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedItems, setExpandedItems] = useState<string[]>([])
 
@@ -50,20 +58,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       label: 'Agents', 
       href: '/dashboard/agents',
       children: [
-        { id: 'all-agents', label: 'All Agents', href: '/dashboard/agents' },
-        { id: 'performance', label: 'Performance', href: '/dashboard/agents/performance' },
+        { id: 'all-agents', label: 'All Agents', href: '/dashboard/agents' }
+        // { id: 'performance', label: 'Performance', href: '/dashboard/agents/performance' },
       ]
     },
-    { id: 'clients', icon: Icons.User, label: 'Clients', href: '/dashboard/clients' },
+    { id: 'Users', icon: Icons.User, label: 'Users', href: '/dashboard/users' },
     { 
       id: 'finance', 
       icon: Icons.CreditCard, 
       label: 'Finance', 
-      href: '/dashboard/transactions',
+      href: '/dashboard/finance/transactions',
       children: [
-        { id: 'transactions', label: 'Transactions', href: '/dashboard/transactions' },
-        { id: 'invoices', label: 'Invoices', href: '/dashboard/invoices' },
-        { id: 'reports', label: 'Reports', href: '/dashboard/reports' },
+        { id: 'transactions', label: 'Transactions', href: '/dashboard/finance/transactions' },
+        { id: 'invoices', label: 'Invoices', href: '/dashboard/finance/invoices' },
+        { id: 'reports', label: 'Reports', href: '/dashboard/finance/reports' },
       ]
     },
     { id: 'analytics', icon: Icons.BarChart3, label: 'Analytics', href: '/dashboard/analytics' },
@@ -137,10 +145,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     if (hasChildren) {
                       toggleExpanded(item.id)
                     } else {
-                      setActiveTab(item.id)
                       setSidebarOpen(false)
-                      // Navigate to the href
-                      window.location.href = item.href
+                      router.push(item.href)
                     }
                   }}
                   className={`w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
@@ -169,8 +175,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         key={child.id}
                         href={child.href}
                         onClick={() => {
-                          setActiveTab(child.id)
                           setSidebarOpen(false)
+                          router.push(child.href)
                         }}
                         className={`block px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                           activeTab === child.id

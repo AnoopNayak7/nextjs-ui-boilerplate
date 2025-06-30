@@ -47,11 +47,6 @@ export const siteConfig: SiteConfig = {
           icon: "list",
         },
         {
-          title: "Add Property",
-          href: "/dashboard/properties/add",
-          icon: "plus",
-        },
-        {
           title: "Featured",
           href: "/dashboard/properties/featured",
           icon: "star",
@@ -68,36 +63,31 @@ export const siteConfig: SiteConfig = {
           href: "/dashboard/agents",
           icon: "users",
         },
-        {
-          title: "Performance",
-          href: "/dashboard/agents/performance",
-          icon: "trending-up",
-        },
       ],
     },
     {
-      title: "Clients",
-      href: "/dashboard/clients",
+      title: "Users",
+      href: "/dashboard/users",
       icon: "user",
     },
     {
       title: "Finance",
-      href: "/dashboard/transactions",
+      href: "/dashboard/finance",
       icon: "credit-card",
       children: [
         {
           title: "Transactions",
-          href: "/dashboard/transactions",
+          href: "/dashboard/finance/transactions",
           icon: "credit-card",
         },
         {
           title: "Invoices",
-          href: "/dashboard/invoices",
+          href: "/dashboard/finance/invoices",
           icon: "file-text",
         },
         {
           title: "Reports",
-          href: "/dashboard/reports",
+          href: "/dashboard/finance/reports",
           icon: "bar-chart",
         },
       ],

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Search,
   Filter,
@@ -15,6 +16,11 @@ import {
 } from 'lucide-react'
 
 export default function PropertiesPage() {
+  const router = useRouter()
+  const handleAddProperty = () => {
+    router.push('/dashboard/properties/add')
+  }
+
   const [selectedFilters, setSelectedFilters] = useState({
     status: 'all',
     type: 'all',
