@@ -82,7 +82,7 @@ export default function ReportsPage() {
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="text-xs border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="text-xs border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-red-500"
           >
             <option>This Month</option>
             <option>Last Month</option>
@@ -102,8 +102,8 @@ export default function ReportsPage() {
         {metrics.map((metric, index) => (
           <div key={index} className="bg-white p-4 rounded-lg shadow-sm border space-y-2">
             <div className="flex items-center justify-between">
-              <div className="p-2 bg-indigo-50 rounded-lg">
-                <metric.icon size={16} className="text-indigo-600" />
+              <div className="p-2 bg-red-50 rounded-lg">
+                <metric.icon size={16} className="text-red-600" />
               </div>
               <span className={`text-xs font-medium flex items-center ${metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                 {metric.trend === 'up' ? <TrendingUp size={14} className="mr-1" /> : <TrendingDown size={14} className="mr-1" />}

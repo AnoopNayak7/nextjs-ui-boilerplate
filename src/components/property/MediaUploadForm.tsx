@@ -135,14 +135,14 @@ export default function MediaUploadForm({ onSubmit, initialImages = [], initialF
         <button
           type="button"
           onClick={() => setActiveTab('images')}
-          className={`pb-4 text-sm font-medium ${activeTab === 'images' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+          className={`pb-4 text-sm font-medium ${activeTab === 'images' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500 hover:text-gray-700'}`}
         >
           Property Images
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('floorPlans')}
-          className={`pb-4 text-sm font-medium ${activeTab === 'floorPlans' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+          className={`pb-4 text-sm font-medium ${activeTab === 'floorPlans' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500 hover:text-gray-700'}`}
         >
           Floor Plans
         </button>
@@ -154,7 +154,7 @@ export default function MediaUploadForm({ onSubmit, initialImages = [], initialF
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-indigo-600 bg-indigo-50' : 'border-gray-300'}`}
+        className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-red-600 bg-red-50' : 'border-gray-300'}`}
       >
         <div className="space-y-4">
           <div className="mx-auto w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -166,7 +166,7 @@ export default function MediaUploadForm({ onSubmit, initialImages = [], initialF
               <button
                 type="button"
                 onClick={() => activeTab === 'images' ? imageInputRef.current?.click() : floorPlanInputRef.current?.click()}
-                className="text-indigo-600 hover:text-indigo-700 mx-1"
+                className="text-red-600 hover:text-red-700 mx-1"
               >
                 browse
               </button>
@@ -264,7 +264,7 @@ export default function MediaUploadForm({ onSubmit, initialImages = [], initialF
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
         >
           Save Media
         </button>

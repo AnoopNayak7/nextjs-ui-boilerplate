@@ -299,7 +299,7 @@ export default function PropertiesPage() {
               placeholder="Search properties..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 w-full sm:w-64 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm"
+              className="pl-10 pr-4 py-2 w-full sm:w-64 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 text-sm"
             />
           </div>
 
@@ -434,7 +434,7 @@ export default function PropertiesPage() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{property.views.toLocaleString()}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                  <button className="text-indigo-600 hover:text-indigo-900 transition-colors">
+                  <button className="text-red-600 hover:text-red-900 transition-colors">
                     <Eye size={16} />
                   </button>
                   <button className="text-blue-600 hover:text-blue-900 transition-colors">
@@ -458,7 +458,7 @@ export default function PropertiesPage() {
       </div>
 
       {/* Floating Action Button */}
-      <button className="fixed bottom-8 right-8 p-4 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 z-50">
+      <button className="fixed bottom-8 right-8 p-4 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 z-50">
         <Plus size={24} />
       </button>
 

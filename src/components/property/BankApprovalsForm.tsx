@@ -119,7 +119,7 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
               }}
               onFocus={() => setShowBankSuggestions(true)}
               placeholder="Enter bank name"
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
             />
             {showBankSuggestions && filteredBanks.length > 0 && (
               <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
@@ -151,7 +151,7 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
                 ...prev,
                 status: e.target.value as BankApproval['status']
               }))}
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
             >
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
@@ -169,7 +169,7 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
                 type="date"
                 value={newApproval.approvalDate}
                 onChange={(e) => setNewApproval(prev => ({ ...prev, approvalDate: e.target.value }))}
-                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
             </div>
           )}
@@ -185,12 +185,12 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
                 value={newApproval.remarks}
                 onChange={(e) => setNewApproval(prev => ({ ...prev, remarks: e.target.value }))}
                 placeholder="Optional remarks"
-                className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
               <button
                 type="button"
                 onClick={handleAddApproval}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 <Plus size={18} />
               </button>
@@ -248,7 +248,7 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
         >
           Save Approvals
         </button>

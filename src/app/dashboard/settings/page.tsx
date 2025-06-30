@@ -123,7 +123,7 @@ export default function SettingsPage() {
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-xs font-medium"
+          className="flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
         >
           <Save size={14} className="mr-1" />
           Save Changes
@@ -139,7 +139,7 @@ export default function SettingsPage() {
               onClick={() => setActiveSection(section.id)}
               className={`w-full flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 activeSection === section.id
-                  ? 'bg-indigo-50 text-indigo-600'
+                  ? 'bg-red-50 text-red-600'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -171,13 +171,13 @@ export default function SettingsPage() {
                           type={field.type}
                           value={field.value as string}
                           onChange={() => {}}
-                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500"
                         />
                       ) : field.type === 'select' ? (
                         <select
                           value={field.value as string}
                           onChange={() => {}}
-                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500"
                         >
                           {field.options?.map((option) => (
                             <option key={option} value={option}>{option}</option>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
                       ) : field.type === 'toggle' ? (
                         <div
                           className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${
-                            field.value ? 'bg-indigo-600' : 'bg-gray-200'
+                            field.value ? 'bg-red-600' : 'bg-gray-200'
                           }`}
                           role="switch"
                         >

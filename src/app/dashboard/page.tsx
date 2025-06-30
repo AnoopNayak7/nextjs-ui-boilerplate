@@ -48,7 +48,7 @@ function DateRangeSelector({ dateRange, setDateRange }:any) {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between px-3 py-2 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 bg-white hover:bg-slate-50 transition-all duration-200 min-w-[120px] shadow-sm"
+        className="flex items-center justify-between px-3 py-2 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-300 bg-white hover:bg-slate-50 transition-all duration-200 min-w-[120px] shadow-sm"
       >
         <span className="text-slate-700 font-medium">{dateRange}</span>
         <ChevronDown size={12} className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
@@ -65,7 +65,7 @@ function DateRangeSelector({ dateRange, setDateRange }:any) {
                   setIsOpen(false)
                 }}
                 className={`w-full text-left px-3 py-2 text-xs hover:bg-slate-50 transition-colors ${
-                  dateRange === option.value ? 'bg-indigo-50 text-indigo-700 font-semibold border-r-2 border-indigo-500' : 'text-slate-700'
+                  dateRange === option.value ? 'bg-red-50 text-red-700 font-semibold border-r-2 border-red-500' : 'text-slate-700'
                 }`}
               >
                 {option.label}

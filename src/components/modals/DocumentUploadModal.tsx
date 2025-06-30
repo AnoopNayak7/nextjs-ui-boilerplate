@@ -98,7 +98,7 @@ export default function DocumentUploadModal({
         </div>
 
         <div 
-          className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+          className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -109,7 +109,7 @@ export default function DocumentUploadModal({
             Drag and drop your documents here, or
             <button 
               onClick={() => inputRef.current?.click()}
-              className="text-indigo-600 hover:text-indigo-800 font-medium mx-1"
+              className="text-red-600 hover:text-red-800 font-medium mx-1"
             >
               browse
             </button>
@@ -186,7 +186,7 @@ export default function DocumentUploadModal({
           <button
             onClick={handleUpload}
             disabled={selectedFiles.length === 0}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Upload {selectedFiles.length > 0 && `(${selectedFiles.length})`}
           </button>

@@ -101,12 +101,12 @@ export default function AgentsPage() {
             placeholder="Search agents by name, email, or location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-9 pr-4 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-transparent"
           />
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-xs font-medium"
+          className="flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
         >
           <Plus size={14} className="mr-1" />
           Add Agent

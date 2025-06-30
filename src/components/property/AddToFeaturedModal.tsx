@@ -84,7 +84,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
               placeholder="Search properties..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
             />
           </div>
 
@@ -94,7 +94,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
               <button
                 key={property.id}
                 onClick={() => setSelectedProperty(property)}
-                className={`w-full p-3 text-left hover:bg-gray-50 transition-colors ${selectedProperty?.id === property.id ? 'bg-indigo-50' : ''}`}
+                className={`w-full p-3 text-left hover:bg-gray-50 transition-colors ${selectedProperty?.id === property.id ? 'bg-red-50' : ''}`}
               >
                 <div className="flex justify-between items-start">
                   <div>
@@ -123,7 +123,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
                     startDate={startDate}
                     endDate={endDate}
                     onChange={(update) => setDateRange(update)}
-                    className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholderText="Select date range"
                   />
                 </div>
@@ -140,7 +140,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
                       type="radio"
                       checked={isPaid}
                       onChange={() => setIsPaid(true)}
-                      className="text-indigo-600 focus:ring-indigo-500"
+                      className="text-red-600 focus:ring-red-500"
                     />
                     <span className="text-sm text-gray-700">Paid</span>
                   </label>
@@ -149,7 +149,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
                       type="radio"
                       checked={!isPaid}
                       onChange={() => setIsPaid(false)}
-                      className="text-indigo-600 focus:ring-indigo-500"
+                      className="text-red-600 focus:ring-red-500"
                     />
                     <span className="text-sm text-gray-700">Special Deal</span>
                   </label>
@@ -169,7 +169,7 @@ export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModa
           <button
             onClick={handleAdd}
             disabled={!selectedProperty || !startDate || !endDate}
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add to Featured
           </button>

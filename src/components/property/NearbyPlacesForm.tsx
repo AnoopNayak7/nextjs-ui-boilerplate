@@ -100,7 +100,7 @@ export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: Nearb
               value={newPlace.name}
               onChange={(e) => setNewPlace(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Enter place name"
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
             />
           </div>
 
@@ -112,7 +112,7 @@ export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: Nearb
               id="category"
               value={newPlace.category}
               onChange={(e) => setNewPlace((prev:any) => ({ ...prev, category: e.target.value }))}
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
             >
               {PLACE_CATEGORIES.map(category => (
                 <option key={category} value={category}>{category}</option>
@@ -131,12 +131,12 @@ export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: Nearb
                 value={newPlace.distance}
                 onChange={(e) => setNewPlace(prev => ({ ...prev, distance: e.target.value }))}
                 placeholder="e.g., 2 km or 500 m"
-                className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
               <button
                 type="button"
                 onClick={handleAddPlace}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 <Plus size={18} />
               </button>
@@ -182,7 +182,7 @@ export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: Nearb
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
         >
           Save Places
         </button>

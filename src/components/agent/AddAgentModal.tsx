@@ -61,7 +61,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter agent's full name"
             />
           </div>
@@ -77,7 +77,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter email address"
             />
           </div>
@@ -93,7 +93,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
               required
               value={formData.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter phone number"
             />
           </div>
@@ -109,7 +109,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
               required
               value={formData.reraId}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter RERA ID"
             />
           </div>
@@ -125,7 +125,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
               required
               value={formData.location}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Enter location"
             />
           </div>
@@ -140,7 +140,7 @@ export default function AddAgentModal({ onClose, onAdd }: AddAgentModalProps) {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium"
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
             >
               Add Agent
             </button>

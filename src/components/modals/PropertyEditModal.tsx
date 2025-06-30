@@ -98,7 +98,7 @@ export default function PropertyEditModal({
               type="text"
               value={details.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className={`w-full p-2 text-xs border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              className={`w-full p-2 text-xs border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500`}
             />
             {errors.name && (
               <p className="mt-1 text-xs text-red-600">{errors.name}</p>
@@ -113,7 +113,7 @@ export default function PropertyEditModal({
             <select
               value={details.type}
               onChange={(e) => handleChange('type', e.target.value)}
-              className={`w-full p-2 text-xs border ${errors.type ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              className={`w-full p-2 text-xs border ${errors.type ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500`}
             >
               <option value="">Select Type</option>
               <option value="apartment">Apartment</option>
@@ -134,7 +134,7 @@ export default function PropertyEditModal({
             <select
               value={details.bhk}
               onChange={(e) => handleChange('bhk', e.target.value)}
-              className={`w-full p-2 text-xs border ${errors.bhk ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              className={`w-full p-2 text-xs border ${errors.bhk ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500`}
             >
               <option value="">Select BHK</option>
               <option value="1">1 BHK</option>
@@ -157,7 +157,7 @@ export default function PropertyEditModal({
               type="text"
               value={details.area}
               onChange={(e) => handleChange('area', e.target.value)}
-              className={`w-full p-2 text-xs border ${errors.area ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              className={`w-full p-2 text-xs border ${errors.area ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500`}
             />
             {errors.area && (
               <p className="mt-1 text-xs text-red-600">{errors.area}</p>
@@ -173,7 +173,7 @@ export default function PropertyEditModal({
               type="text"
               value={details.floor}
               onChange={(e) => handleChange('floor', e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
             />
           </div>
 
@@ -185,7 +185,7 @@ export default function PropertyEditModal({
             <select
               value={details.age}
               onChange={(e) => handleChange('age', e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
             >
               <option value="">Select Age</option>
               <option value="under_construction">Under Construction</option>
@@ -204,7 +204,7 @@ export default function PropertyEditModal({
             <select
               value={details.parking}
               onChange={(e) => handleChange('parking', e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
             >
               <option value="">Select Parking</option>
               <option value="none">None</option>
@@ -222,7 +222,7 @@ export default function PropertyEditModal({
             <select
               value={details.facing}
               onChange={(e) => handleChange('facing', e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
             >
               <option value="">Select Facing</option>
               <option value="north">North</option>
@@ -245,7 +245,7 @@ export default function PropertyEditModal({
               type="text"
               value={details.reraNumber}
               onChange={(e) => handleChange('reraNumber', e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="w-full p-2 text-xs border border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
             />
           </div>
         </div>
@@ -259,7 +259,7 @@ export default function PropertyEditModal({
           </button>
           <button
             onClick={handleSubmit}
-            className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700"
+            className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-700"
           >
             Save Changes
           </button>

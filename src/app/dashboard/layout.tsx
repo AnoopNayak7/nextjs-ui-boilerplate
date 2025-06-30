@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()
@@ -113,8 +114,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="px-6 py-5 border-b border-gray-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
+              {/* <div className="w-8 h-8 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
                 <span className="text-white text-sm font-semibold">EP</span>
+              </div> */}
+              <div>
+                <Image
+                  src="/uhilogo.svg"
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                />
               </div>
               <div>
                 <h1 className="text-sm font-semibold text-[#1A1A1A]">{siteConfig.name}</h1>
@@ -151,7 +160,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   }}
                   className={`w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-gradient-to-r from-indigo-700 to-indigo-900 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-[#1A1A1A]'
                   }`}
                 >

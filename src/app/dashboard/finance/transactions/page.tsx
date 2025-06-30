@@ -91,7 +91,7 @@ export default function TransactionsPage() {
             placeholder="Search by description, category, or reference..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full pl-9 pr-4 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-transparent"
           />
         </div>
         <button className="p-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-500">

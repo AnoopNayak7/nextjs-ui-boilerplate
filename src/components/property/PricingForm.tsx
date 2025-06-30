@@ -116,7 +116,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 onChange={(e) => handlePricingChange('totalPrice', Number(e.target.value))}
                 min="0"
                 step="1000"
-                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value={pricing.pricePerSqFt}
                 onChange={(e) => handlePricingChange('pricePerSqFt', Number(e.target.value))}
                 min="0"
-                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value={pricing.bookingAmount}
                 onChange={(e) => handlePricingChange('bookingAmount', Number(e.target.value))}
                 min="0"
-                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -177,13 +177,13 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                   value={pricing.maintenanceCharges}
                   onChange={(e) => handlePricingChange('maintenanceCharges', Number(e.target.value))}
                   min="0"
-                  className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
               <select
                 value={pricing.maintenancePeriod}
                 onChange={(e) => handlePricingChange('maintenancePeriod', e.target.value)}
-                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
               >
                 <option value="monthly">Monthly</option>
                 <option value="quarterly">Quarterly</option>
@@ -206,7 +206,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value={pricing.otherCharges}
                 onChange={(e) => handlePricingChange('otherCharges', Number(e.target.value))}
                 min="0"
-                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value="full"
                 checked={pricing.paymentPlan === 'full'}
                 onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
               />
             </label>
 
@@ -246,7 +246,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value="construction-linked"
                 checked={pricing.paymentPlan === 'construction-linked'}
                 onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
               />
             </label>
 
@@ -261,7 +261,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value="custom"
                 checked={pricing.paymentPlan === 'custom'}
                 onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
               />
             </label>
           </div>
@@ -284,7 +284,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                 value={newMilestone.milestone}
                 onChange={(e) => setNewMilestone(prev => ({ ...prev, milestone: e.target.value }))}
                 placeholder="Milestone description"
-                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
               <div className="flex space-x-2">
                 <input
@@ -294,12 +294,12 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                   min="1"
                   max="100"
                   placeholder="Percentage"
-                  className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <button
                   type="button"
                   onClick={handleAddMilestone}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
                 >
                   Add
                 </button>
@@ -320,7 +320,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
                     <div className="flex items-center space-x-2">
                       <span className="text-sm font-medium text-gray-700">{index + 1}.</span>
                       <span className="text-sm text-gray-700">{milestone.milestone}</span>
-                      <span className="text-sm font-medium text-indigo-600">{milestone.percentage}%</span>
+                      <span className="text-sm font-medium text-red-600">{milestone.percentage}%</span>
                     </div>
                     <button
                       type="button"
@@ -340,7 +340,7 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
         >
           Save Pricing Details
         </button>

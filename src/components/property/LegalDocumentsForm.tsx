@@ -118,7 +118,7 @@ export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: 
             type="button"
             onClick={() => setSelectedCategory(category.id)}
             className={`p-4 rounded-lg text-sm font-medium text-center transition-colors ${selectedCategory === category.id
-              ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-200'
+              ? 'bg-red-100 text-red-700 border-2 border-red-200'
               : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-transparent'}`}
           >
             {category.label}
@@ -132,7 +132,7 @@ export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: 
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-lg p-6 text-center ${dragActive ? 'border-indigo-600 bg-indigo-50' : 'border-gray-300'}`}
+        className={`border-2 border-dashed rounded-lg p-6 text-center ${dragActive ? 'border-red-600 bg-red-50' : 'border-gray-300'}`}
       >
         <div className="space-y-3">
           <div className="mx-auto w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -144,7 +144,7 @@ export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: 
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="text-indigo-600 hover:text-indigo-700 mx-1"
+                className="text-red-600 hover:text-red-700 mx-1"
               >
                 browse
               </button>
@@ -212,7 +212,7 @@ export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: 
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
         >
           Save Documents
         </button>

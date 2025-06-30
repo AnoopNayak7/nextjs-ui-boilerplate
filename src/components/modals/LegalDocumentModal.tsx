@@ -162,7 +162,7 @@ export default function LegalDocumentModal({
                       href={doc.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                      className="text-red-600 hover:text-red-800 text-sm font-medium"
                     >
                       View
                     </a>
@@ -181,7 +181,7 @@ export default function LegalDocumentModal({
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value as DocumentType)}
-            className="w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            className="w-full border-gray-300 rounded-lg shadow-sm focus:border-red-500 focus:ring-red-500"
           >
             {Object.entries(DOCUMENT_TYPE_LABELS).map(([value, label]) => (
               <option key={value} value={value}>{label}</option>
@@ -191,7 +191,7 @@ export default function LegalDocumentModal({
 
         {/* Upload Area */}
         <div 
-          className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+          className={`border-2 border-dashed rounded-lg p-8 text-center ${dragActive ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -202,7 +202,7 @@ export default function LegalDocumentModal({
             Drag and drop your document here, or
             <button 
               onClick={() => inputRef.current?.click()}
-              className="text-indigo-600 hover:text-indigo-800 font-medium mx-1"
+              className="text-red-600 hover:text-red-800 font-medium mx-1"
             >
               browse
             </button>
@@ -271,7 +271,7 @@ export default function LegalDocumentModal({
           <button
             onClick={handleUpload}
             disabled={selectedDocuments.length === 0}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Upload {selectedDocuments.length > 0 && `(${selectedDocuments.length})`}
           </button>

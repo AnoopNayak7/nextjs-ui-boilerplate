@@ -77,13 +77,13 @@ export default function AmenitiesModal({
           <div className="flex space-x-4 border-b">
             <button
               onClick={() => setAmenityType('inBuilding')}
-              className={`pb-2 text-xs font-medium ${amenityType === 'inBuilding' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}
+              className={`pb-2 text-xs font-medium ${amenityType === 'inBuilding' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
             >
               In Building
             </button>
             <button
               onClick={() => setAmenityType('society')}
-              className={`pb-2 text-xs font-medium ${amenityType === 'society' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}
+              className={`pb-2 text-xs font-medium ${amenityType === 'society' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
             >
               Society/Area
             </button>
@@ -95,9 +95,9 @@ export default function AmenitiesModal({
               <div
                 key={amenity}
                 onClick={() => handleToggleAmenity(amenityType, amenity)}
-                className={`flex items-center p-2 rounded-lg cursor-pointer text-xs ${selectedAmenities[amenityType].includes(amenity) ? 'bg-indigo-50 text-indigo-600' : 'hover:bg-gray-50'}`}
+                className={`flex items-center p-2 rounded-lg cursor-pointer text-xs ${selectedAmenities[amenityType].includes(amenity) ? 'bg-red-50 text-red-600' : 'hover:bg-gray-50'}`}
               >
-                <div className={`w-4 h-4 rounded border mr-2 flex items-center justify-center ${selectedAmenities[amenityType].includes(amenity) ? 'border-indigo-600 bg-indigo-600' : 'border-gray-300'}`}>
+                <div className={`w-4 h-4 rounded border mr-2 flex items-center justify-center ${selectedAmenities[amenityType].includes(amenity) ? 'border-red-600 bg-red-600' : 'border-gray-300'}`}>
                   {selectedAmenities[amenityType].includes(amenity) && (
                     <Check size={12} className="text-white" />
                   )}
@@ -114,12 +114,12 @@ export default function AmenitiesModal({
               value={customAmenity}
               onChange={(e) => setCustomAmenity(e.target.value)}
               placeholder="Add custom amenity"
-              className="flex-1 text-xs p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              className="flex-1 text-xs p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-red-500 focus:border-red-500"
             />
             <button
               onClick={handleAddCustomAmenity}
               disabled={!customAmenity.trim()}
-              className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-xs hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center"
+              className="px-3 py-1 bg-red-600 text-white rounded-lg text-xs hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center"
             >
               <Plus size={12} className="mr-1" />
               Add
@@ -139,7 +139,7 @@ export default function AmenitiesModal({
               onSave(selectedAmenities)
               onClose()
             }}
-            className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs hover:bg-indigo-700"
+            className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs hover:bg-red-700"
           >
             Save Changes
           </button>

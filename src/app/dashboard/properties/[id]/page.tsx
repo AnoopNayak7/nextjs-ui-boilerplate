@@ -148,8 +148,8 @@ export default function PropertyDetailPage() {
 
   const DistanceCard = ({ icon: Icon, label, distance }:any) => (
     <div className="flex items-center space-x-2 p-2 border rounded-lg bg-white">
-      <div className="p-1.5 bg-indigo-50 rounded-lg">
-        <Icon size={14} className="text-indigo-600" />
+      <div className="p-1.5 bg-red-50 rounded-lg">
+        <Icon size={14} className="text-red-600" />
       </div>
       <div>
         <p className="text-xs font-medium text-gray-900">{label}</p>
@@ -170,7 +170,7 @@ export default function PropertyDetailPage() {
           <span className="text-xl font-bold text-gray-900">₹{(property.price / 10000000).toFixed(2)} Cr</span>
           <button 
             onClick={() => setShowPropertyEditModal(true)}
-            className="px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-2 text-sm"
+            className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2 text-sm"
           >
             <Edit3 size={14} />
             <span>Edit Details</span>
@@ -185,7 +185,7 @@ export default function PropertyDetailPage() {
             <h2 className="text-base font-semibold text-gray-900">Property Images</h2>
             <button 
               onClick={() => setShowImageUploadModal(true)}
-              className="px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-1 text-sm"
+              className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-1 text-sm"
             >
               <Plus size={14} />
               <span>Add Image</span>
@@ -278,7 +278,7 @@ export default function PropertyDetailPage() {
                             Verified
                           </span>
                         ) : (
-                          <button className="text-indigo-600 text-xs font-medium hover:text-indigo-800">
+                          <button className="text-red-600 text-xs font-medium hover:text-red-800">
                             Mark as Verified
                           </button>
                         )}
@@ -297,7 +297,7 @@ export default function PropertyDetailPage() {
                 <h2 className="text-base font-semibold text-gray-900">Description</h2>
                 <button 
                   onClick={() => setEditingDescription(!editingDescription)}
-                  className="text-indigo-600 hover:text-indigo-800 text-xs font-medium flex items-center space-x-1"
+                  className="text-red-600 hover:text-red-800 text-xs font-medium flex items-center space-x-1"
                 >
                   {editingDescription ? <Save size={12} /> : <Edit3 size={12} />}
                   <span>{editingDescription ? 'Save' : 'Edit'}</span>
@@ -307,7 +307,7 @@ export default function PropertyDetailPage() {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg text-xs resize-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full p-3 border border-gray-300 rounded-lg text-xs resize-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
                   rows={4}
                   placeholder="Enter property description..."
                 />
@@ -333,7 +333,7 @@ export default function PropertyDetailPage() {
                     ))}
                     <button 
                       onClick={() => setShowAmenitiesModal(true)}
-                      className="flex items-center space-x-1 text-xs text-indigo-600 hover:text-indigo-800"
+                      className="flex items-center space-x-1 text-xs text-red-600 hover:text-red-800"
                     >
                       <Plus size={12} />
                       <span>Add More</span>
@@ -351,7 +351,7 @@ export default function PropertyDetailPage() {
                     ))}
                     <button 
                       onClick={() => setShowAmenitiesModal(true)}
-                      className="flex items-center space-x-1 text-xs text-indigo-600 hover:text-indigo-800"
+                      className="flex items-center space-x-1 text-xs text-red-600 hover:text-red-800"
                     >
                       <Plus size={12} />
                       <span>Add More</span>
@@ -369,7 +369,7 @@ export default function PropertyDetailPage() {
                 <h2 className="text-base font-semibold text-gray-900">Legal Documents</h2>
                 <button 
                   onClick={() => setShowLegalDocumentModal(true)}
-                  className="px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-1 text-xs"
+                  className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-1 text-xs"
                 >
                   <Upload size={12} />
                   <span>Upload Document</span>
@@ -394,7 +394,7 @@ export default function PropertyDetailPage() {
                       <FileText className="text-gray-400" size={16} />
                       <span className="text-xs font-medium text-gray-700">{plan.name}</span>
                     </div>
-                    <button className="text-indigo-600 hover:text-indigo-800">
+                    <button className="text-red-600 hover:text-red-800">
                       <Eye size={14} />
                     </button>
                   </div>
@@ -461,7 +461,7 @@ export default function PropertyDetailPage() {
                 </div>
               </div>
               <div className="mt-3 space-y-2">
-                <button className="w-full px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-xs font-medium">
+                <button className="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium">
                   Contact Now
                 </button>
                 <button className="w-full px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium">
@@ -531,7 +531,7 @@ export default function PropertyDetailPage() {
                                 setSelectedBanks(selectedBanks.filter((b) => b !== bank))
                               }
                             }}
-                            className="rounded text-indigo-600 focus:ring-indigo-500"
+                            className="rounded text-red-600 focus:ring-red-500"
                           />
                           <span className="text-xs text-gray-700">{bank}</span>
                         </label>
