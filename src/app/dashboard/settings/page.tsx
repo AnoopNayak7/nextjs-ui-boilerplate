@@ -1,7 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { Save, Bell, Lock, Globe, Mail, User, Building, IndianRupee } from 'lucide-react'
+import {
+  Save,
+  Mail,
+  Phone,
+  ShieldAlert,
+  Loader2,
+  Globe,
+  Zap,
+  IndianRupee,
+} from 'lucide-react'
+
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 
 interface SettingSection {
   id: string
@@ -11,192 +26,181 @@ interface SettingSection {
   fields: Array<{
     id: string
     label: string
-    type: 'text' | 'email' | 'select' | 'toggle' | 'textarea'
+    type: 'text' | 'select' | 'toggle'
     value: string | boolean
     options?: string[]
   }>
 }
 
 export default function SettingsPage() {
-  const [activeSection, setActiveSection] = useState('general')
+  const [activeSection, setActiveSection] = useState('email-verification')
 
   const settingSections: SettingSection[] = [
     {
-      id: 'general',
-      title: 'General Settings',
-      description: 'Basic configuration settings for your platform',
+      id: 'email-verification',
+      title: 'Email or Phone Verification',
+      description: 'Toggle whether users must verify email or phone to sign in',
+      icon: Mail,
+      fields: [
+        {
+          id: 'requireEmailVerification',
+          label: 'Require Email Verification',
+          type: 'toggle',
+          value: true,
+        },
+        {
+          id: 'requirePhoneVerification',
+          label: 'Require Phone Number Verification',
+          type: 'toggle',
+          value: false,
+        },
+      ],
+    },
+    {
+      id: 'smtp-health',
+      title: 'SMTP Health Check',
+      description: 'Configure SMTP ping interval and status monitoring',
       icon: Globe,
       fields: [
         {
-          id: 'siteName',
-          label: 'Platform Name',
+          id: 'smtpPingInterval',
+          label: 'Ping Interval (minutes)',
           type: 'text',
-          value: 'UHI Admin'
+          value: '5',
         },
         {
-          id: 'timezone',
-          label: 'Default Timezone',
-          type: 'select',
-          value: 'Asia/Kolkata',
-          options: ['Asia/Kolkata', 'UTC', 'America/New_York']
-        }
-      ]
+          id: 'smtpFailThreshold',
+          label: 'Fail Threshold Count',
+          type: 'text',
+          value: '3',
+        },
+      ],
     },
     {
-      id: 'notifications',
-      title: 'Notifications',
-      description: 'Configure how you receive notifications',
-      icon: Bell,
+      id: 'brute-force',
+      title: 'Brute Force Detection',
+      description: 'Security threshold to block repeated failed logins',
+      icon: ShieldAlert,
       fields: [
         {
-          id: 'emailNotifications',
-          label: 'Email Notifications',
-          type: 'toggle',
-          value: true
-        },
-        {
-          id: 'notificationTypes',
-          label: 'Notification Types',
-          type: 'select',
-          value: 'all',
-          options: ['all', 'important', 'none']
-        }
-      ]
-    },
-    {
-      id: 'security',
-      title: 'Security',
-      description: 'Manage security settings and permissions',
-      icon: Lock,
-      fields: [
-        {
-          id: 'twoFactor',
-          label: 'Two-Factor Authentication',
-          type: 'toggle',
-          value: false
-        },
-        {
-          id: 'sessionTimeout',
-          label: 'Session Timeout (minutes)',
+          id: 'failedLoginAttempts',
+          label: 'Max Failed Login Attempts',
           type: 'text',
-          value: '30'
-        }
-      ]
+          value: '5',
+        },
+        {
+          id: 'blockDuration',
+          label: 'Block Duration (minutes)',
+          type: 'text',
+          value: '60',
+        },
+      ],
     },
     {
-      id: 'property',
-      title: 'Property Settings',
-      description: 'Configure property-related settings',
-      icon: Building,
+      id: 'currency',
+      title: 'Default Currency',
+      description: 'Currency to be used across all listings & payments',
+      icon: IndianRupee,
       fields: [
         {
           id: 'defaultCurrency',
-          label: 'Default Currency',
+          label: 'Select Currency',
           type: 'select',
           value: 'INR',
-          options: ['INR', 'USD', 'EUR']
+          options: ['INR', 'USD', 'EUR'],
         },
+      ],
+    },
+    {
+      id: 'rate-limit',
+      title: 'API Rate Limit',
+      description: 'Enable rate limiting across public API endpoints',
+      icon: Zap,
+      fields: [
         {
-          id: 'listingDuration',
-          label: 'Default Listing Duration (days)',
-          type: 'text',
-          value: '30'
-        }
-      ]
-    }
+          id: 'enableRateLimit',
+          label: 'Enable Rate Limiting',
+          type: 'toggle',
+          value: true,
+        },
+      ],
+    },
   ]
 
   const handleSave = () => {
-    // Implement settings save logic
     console.log('Settings saved')
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-base font-semibold text-gray-900">Settings</h1>
           <p className="text-xs text-gray-500">
-            Manage your platform settings and preferences
+            Manage platform-level configurations
           </p>
         </div>
-        <button
-          onClick={handleSave}
-          className="flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs font-medium"
-        >
-          <Save size={14} className="mr-1" />
+        <Button onClick={handleSave} className="text-xs gap-1">
+          <Save className="w-4 h-4" />
           Save Changes
-        </button>
+        </Button>
       </div>
 
       <div className="flex gap-4">
-        {/* Settings Navigation */}
-        <div className="w-64 bg-white rounded-lg shadow-sm border p-3 space-y-1">
+        {/* Sidebar */}
+        <div className="w-64 bg-white border rounded-xl p-3 space-y-1">
           {settingSections.map((section) => (
-            <button
+            <Button
               key={section.id}
+              variant="ghost"
               onClick={() => setActiveSection(section.id)}
-              className={`w-full flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+              className={`w-full justify-start text-xs font-medium ${
                 activeSection === section.id
                   ? 'bg-red-50 text-red-600'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  : 'text-gray-700 hover:bg-gray-50'
               }`}
             >
-              <section.icon size={14} className="mr-2" />
+              <section.icon className="w-4 h-4 mr-2" />
               {section.title}
-            </button>
+            </Button>
           ))}
         </div>
 
-        {/* Settings Content */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm border p-4">
+        {/* Content */}
+        <div className="flex-1 bg-white border rounded-xl p-6">
           {settingSections.map((section) => (
-            <div
-              key={section.id}
-              className={activeSection === section.id ? '' : 'hidden'}
-            >
+            <div key={section.id} className={activeSection === section.id ? '' : 'hidden'}>
               <div className="mb-4">
-                <h2 className="text-sm font-medium text-gray-900">{section.title}</h2>
+                <h2 className="text-sm font-semibold text-gray-900">{section.title}</h2>
                 <p className="text-xs text-gray-500">{section.description}</p>
               </div>
 
               <div className="space-y-4">
                 {section.fields.map((field) => (
                   <div key={field.id} className="grid grid-cols-3 gap-4 items-center">
-                    <label className="text-xs font-medium text-gray-700">{field.label}</label>
+                    <Label className="text-xs">{field.label}</Label>
                     <div className="col-span-2">
-                      {field.type === 'text' || field.type === 'email' ? (
-                        <input
-                          type={field.type}
-                          value={field.value as string}
-                          onChange={() => {}}
-                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500"
-                        />
-                      ) : field.type === 'select' ? (
-                        <select
-                          value={field.value as string}
-                          onChange={() => {}}
-                          className="w-full px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-500"
-                        >
-                          {field.options?.map((option) => (
-                            <option key={option} value={option}>{option}</option>
-                          ))}
-                        </select>
-                      ) : field.type === 'toggle' ? (
-                        <div
-                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${
-                            field.value ? 'bg-red-600' : 'bg-gray-200'
-                          }`}
-                          role="switch"
-                        >
-                          <span
-                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                              field.value ? 'translate-x-4' : 'translate-x-0.5'
-                            }`}
-                          />
-                        </div>
-                      ) : null}
+                      {field.type === 'text' && (
+                        <Input value={field.value as string} />
+                      )}
+                      {field.type === 'select' && (
+                        <Select defaultValue={field.value as string}>
+                          <SelectTrigger className="w-full h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {field.options?.map((opt) => (
+                              <SelectItem key={opt} value={opt}>
+                                {opt}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                      {field.type === 'toggle' && (
+                        <Switch checked={field.value as boolean} />
+                      )}
                     </div>
                   </div>
                 ))}

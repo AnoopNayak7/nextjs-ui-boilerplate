@@ -115,34 +115,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           id: 'health-monitoring', 
           icon: Activity, 
           label: 'Health Check', 
-          href: '/dashboard/monitoring/health',
+          href: '/dashboard/system-monitoring',
           children: [
-            { id: 'system-health', label: 'System Health', href: '/dashboard/monitoring/health/system' },
+            { id: 'system-health', label: 'System Health', href: '/dashboard/system-monitoring/health-check' },
             // { id: 'api-health', label: 'API Health', href: '/dashboard/monitoring/health/api' },
-            { id: 'service-status', label: 'Service Status', href: '/dashboard/monitoring/health/services' },
+            // { id: 'service-status', label: 'Service Status', href: '/dashboard/monitoring/health/services' },
           ]
         },
         { 
           id: 'database-monitoring', 
           icon: Database, 
           label: 'Database', 
-          href: '/dashboard/monitoring/database',
+          href: '/dashboard/system-monitoring/database',
           children: [
             // { id: 'db-performance', label: 'Performance', href: '/dashboard/monitoring/database/performance' },
             // { id: 'db-queries', label: 'Query Analysis', href: '/dashboard/monitoring/database/queries' },
-            { id: 'db-connections', label: 'Connections', href: '/dashboard/monitoring/database/connections' },
+            { id: 'db-connections', label: 'Connections', href: '/dashboard/system-monitoring/database/connections' },
           ]
         },
         { 
           id: 'server-monitoring', 
           icon: Server, 
           label: 'Server Infrastructure', 
-          href: '/dashboard/monitoring/server',
-          children: [
-            { id: 'server-metrics', label: 'Server Metrics', href: '/dashboard/monitoring/server/metrics' },
-            { id: 'resource-usage', label: 'Resource Usage', href: '/dashboard/monitoring/server/resources' },
-            { id: 'uptime-status', label: 'Uptime Status', href: '/dashboard/monitoring/server/uptime' },
-          ]
+          href: '/dashboard/system-monitoring/server-infrastructure',
+          // children: [
+          //   { id: 'server-metrics', label: 'Server Metrics', href: '/dashboard/monitoring/server/metrics' },
+          //   { id: 'resource-usage', label: 'Resource Usage', href: '/dashboard/monitoring/server/resources' },
+          //   { id: 'uptime-status', label: 'Uptime Status', href: '/dashboard/monitoring/server/uptime' },
+          // ]
         },
       ]
     },
@@ -153,34 +153,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           id: 'code-management', 
           icon: Code, 
           label: 'Code Version', 
-          href: '/dashboard/development/code',
-          children: [
-            { id: 'version-control', label: 'Version Control', href: '/dashboard/development/code/versions' },
-            // { id: 'code-quality', label: 'Code Quality', href: '/dashboard/development/code/quality' },
-            // { id: 'dependencies', label: 'Dependencies', href: '/dashboard/development/code/dependencies' },
-          ]
+          href: '/dashboard/development-deployment/code-version',
+          // children: [
+          //   { id: 'version-control', label: 'Version Control', href: '/dashboard/development/code/versions' },
+          //   // { id: 'code-quality', label: 'Code Quality', href: '/dashboard/development/code/quality' },
+          //   // { id: 'dependencies', label: 'Dependencies', href: '/dashboard/development/code/dependencies' },
+          // ]
         },
         { 
           id: 'deployment', 
           icon: Icons.Orbit, 
           label: 'Deploy Status', 
-          href: '/dashboard/development/deploy',
-          children: [
-            { id: 'deployment-history', label: 'Deployment History', href: '/dashboard/development/deploy/history' },
-            { id: 'rollback-status', label: 'Rollback Status', href: '/dashboard/development/deploy/rollback' },
-            { id: 'environment-status', label: 'Environment Status', href: '/dashboard/development/deploy/environments' },
-          ]
+          href: '/dashboard/development-deployment/deploy-status',
+          // children: [
+          //   { id: 'deployment-history', label: 'Deployment History', href: '/dashboard/development/deploy/history' },
+          //   { id: 'rollback-status', label: 'Rollback Status', href: '/dashboard/development/deploy/rollback' },
+          //   { id: 'environment-status', label: 'Environment Status', href: '/dashboard/development/deploy/environments' },
+          // ]
         },
         { 
           id: 'error-monitoring', 
           icon: AlertTriangle, 
           label: 'Error & Crash Reports', 
-          href: '/dashboard/monitoring/errors',
-          children: [
-            { id: 'error-logs', label: 'Error Logs', href: '/dashboard/monitoring/errors/logs' },
-            { id: 'crash-reports', label: 'Crash Reports', href: '/dashboard/monitoring/errors/crashes' },
-            { id: 'performance-issues', label: 'Performance Issues', href: '/dashboard/monitoring/errors/performance' },
-          ]
+          href: '/dashboard/development-deployment/error-crash',
+          // children: [
+          //   { id: 'error-logs', label: 'Error Logs', href: '/dashboard/monitoring/errors/logs' },
+          //   { id: 'crash-reports', label: 'Crash Reports', href: '/dashboard/monitoring/errors/crashes' },
+          //   { id: 'performance-issues', label: 'Performance Issues', href: '/dashboard/monitoring/errors/performance' },
+          // ]
         },
       ]
     },
@@ -196,19 +196,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             // { id: 'sms-monitoring', label: 'SMS Monitoring', href: '/dashboard/communication/sms' },
             // { id: 'whatsapp-monitoring', label: 'WhatsApp Monitoring', href: '/dashboard/communication/whatsapp' },
             // { id: 'push-notifications', label: 'Push Notifications', href: '/dashboard/communication/push' },
-            { id: 'email-tracking', label: 'Email Tracking', href: '/dashboard/communication/email' },
+            { id: 'email-tracking', label: 'Email Tracking', href: '/dashboard/communication/email-health' },
           ]
         },
         { 
           id: 'system-logs', 
           icon: FileText, 
           label: 'System Logs', 
-          href: '/dashboard/logs',
-          children: [
-            { id: 'application-logs', label: 'Application Logs', href: '/dashboard/logs/application' },
-            { id: 'access-logs', label: 'Access Logs', href: '/dashboard/logs/access' },
-            { id: 'audit-logs', label: 'Audit Logs', href: '/dashboard/logs/audit' },
-          ]
+          href: '/dashboard/communication/system-logs',
+          // children: [
+          //   { id: 'application-logs', label: 'Application Logs', href: '/dashboard/logs/application' },
+          //   { id: 'access-logs', label: 'Access Logs', href: '/dashboard/logs/access' },
+          //   { id: 'audit-logs', label: 'Audit Logs', href: '/dashboard/logs/audit' },
+          // ]
         },
       ]
     },
@@ -221,10 +221,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           label: 'Security Monitoring', 
           href: '/dashboard/security',
           children: [
-            { id: 'brute-force-alerts', label: 'Brute Force Alerts', href: '/dashboard/security/brute-force' },
-            { id: 'blocked-ips', label: 'Blocked IP List', href: '/dashboard/security/blocked-ips' },
-            { id: 'suspicious-activity', label: 'Suspicious Activity', href: '/dashboard/security/suspicious' },
-            { id: 'login-attempts', label: 'Login Attempts', href: '/dashboard/security/login-attempts' },
+            { id: 'brute-force-alerts', label: 'Brute Force Alerts', href: '/dashboard/security/brute-force-alerts' },
+            { id: 'blocked-ips', label: 'Blocked IP List', href: '/dashboard/security/blocked-ip-list' },
+            // { id: 'suspicious-activity', label: 'Suspicious Activity', href: '/dashboard/security/suspicious' },
+            // { id: 'login-attempts', label: 'Login Attempts', href: '/dashboard/security/login-attempts' },
           ]
         },
       ]
@@ -360,7 +360,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 }}
                                 className={`block px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                                   isChildActive
-                                    ? 'bg-gradient-to-r from-gray-100 to-gray-50 text-[#1A1A1A] font-medium border-l-2 border-red-500'
+                                    ? 'bg-gradient-to-r from-gray-100 to-gray-50 text-[#1A1A1A] font-medium'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-[#1A1A1A] hover:translate-x-1'
                                 }`}
                               >

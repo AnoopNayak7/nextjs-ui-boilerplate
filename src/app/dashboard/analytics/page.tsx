@@ -337,10 +337,10 @@ export default function LeadGenerationAnalytics() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-clip-text text-black">
               Lead Generation Analytics
             </h1>
-            <p className="text-gray-600 mt-2 text-lg">
+            <p className="text-gray-600 mt-1 text-sm">
               Track, analyze and optimize your property lead generation performance
             </p>
           </div>
@@ -348,7 +348,7 @@ export default function LeadGenerationAnalytics() {
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
+              className="text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary bg-white shadow-sm"
             >
               <option>Last 7 Days</option>
               <option>Last 30 Days</option>
@@ -357,40 +357,18 @@ export default function LeadGenerationAnalytics() {
               <option>Last 3 Months</option>
               <option>This Year</option>
             </select>
-            <div className="flex bg-white rounded-xl p-1 shadow-sm border border-gray-200">
-              <button
-                onClick={() => setSelectedView('overview')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  selectedView === 'overview' 
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Overview
-              </button>
-              <button
-                onClick={() => setSelectedView('detailed')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  selectedView === 'detailed' 
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Detailed
-              </button>
-            </div>
-            <button className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl">
+            
+            <button className="flex items-center px-5 py-2.5 bg-gradient-to-r from-primary to-red-700 text-white rounded-xl hover:from-red-800 hover:to-red-900 transition-all duration-200 text-xs font-medium shadow-lg hover:shadow-xl whitespace-nowrap">
               <Download size={16} className="mr-2" />
               Export Report
             </button>
           </div>
         </div>
 
-        {/* Lead Generation Performance Metrics */}
         <div>
           <div className="flex items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Lead Generation Performance</h2>
-            <div className="ml-4 px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-sm font-semibold rounded-full border border-green-200">
+            <h2 className="text-lg font-bold text-gray-900">Lead Generation Performance</h2>
+            <div className="ml-4 px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-xs font-semibold rounded-full border border-green-200">
               +24.3% vs last period
             </div>
           </div>
@@ -421,7 +399,7 @@ export default function LeadGenerationAnalytics() {
 
         {/* Engagement Metrics */}
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-6">User Engagement Metrics</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-6">User Engagement Metrics</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {engagementMetrics.map((metric, index) => (
               <div key={index} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
@@ -769,7 +747,7 @@ export default function LeadGenerationAnalytics() {
         {/* Quick Actions & Insights */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Top Insights */}
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-2xl text-white">
+          <div className="bg-gradient-to-br from-gray-700 to-gray-800 p-6 rounded-2xl text-white">
             <div className="flex items-center mb-4">
               <Zap size={24} className="mr-3" />
               <h3 className="text-lg font-bold">Key Insights</h3>
