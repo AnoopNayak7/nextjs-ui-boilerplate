@@ -13,7 +13,19 @@ import {
   Menu,
   X,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Activity,
+  Database,
+  Server,
+  Code,
+  AlertTriangle,
+  MessageSquare,
+  Smartphone,
+  Send,
+  FileText,
+  Shield,
+  UserX,
+  Ban
 } from 'lucide-react'
 import Image from 'next/image'
 
@@ -24,11 +36,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const path = window.location.pathname
-    const currentTab = sidebarItems.find(item => 
-      path === item.href || (item.children?.some(child => path === child.href))
-    )?.id || ''
-    setActiveTab(currentTab)
+    // Check all items and their children to find the active tab
+    const findActiveTab = () => {
+      for (const section of sidebarSections) {
+        for (const item of section.items) {
+          if (path === item.href) {
+            return item.id
+          }
+          if (item.children) {
+            for (const child of item.children) {
+              if (path === child.href) {
+                return child.id
+              }
+            }
+          }
+        }
+      }
+      return ''
+    }
+    setActiveTab(findActiveTab())
   }, [])
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expandedItems, setExpandedItems] = useState<string[]>([])
 
@@ -40,43 +68,173 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     )
   }
 
-  const sidebarItems = [
-    { id: 'dashboard', icon: Icons.LayoutDashboard, label: 'Overview', href: '/dashboard' },
-    { 
-      id: 'properties', 
-      icon: Icons.Home, 
-      label: 'Properties', 
-      href: '/dashboard/properties',
-      children: [
-        { id: 'all-properties', label: 'All Properties', href: '/dashboard/properties' },
-        { id: 'add-property', label: 'Add Property', href: '/dashboard/properties/add' },
-        { id: 'featured', label: 'Featured', href: '/dashboard/properties/featured' },
+  const sidebarSections = [
+    {
+      title: "Business Management",
+      items: [
+        { id: 'dashboard', icon: Icons.LayoutDashboard, label: 'Overview', href: '/dashboard' },
+        { 
+          id: 'properties', 
+          icon: Icons.Home, 
+          label: 'Properties', 
+          href: '/dashboard/properties',
+          children: [
+            { id: 'all-properties', label: 'All Properties', href: '/dashboard/properties' },
+            { id: 'add-property', label: 'Add Property', href: '/dashboard/properties/add' },
+            { id: 'featured', label: 'Featured', href: '/dashboard/properties/featured' },
+          ]
+        },
+        { 
+          id: 'agents', 
+          icon: Icons.Users, 
+          label: 'Agents', 
+          href: '/dashboard/agents',
+          children: [
+            { id: 'all-agents', label: 'All Agents', href: '/dashboard/agents' }
+          ]
+        },
+        { id: 'users', icon: Icons.User, label: 'Users', href: '/dashboard/users' },
+        { 
+          id: 'finance', 
+          icon: Icons.CreditCard, 
+          label: 'Finance', 
+          href: '/dashboard/finance/transactions',
+          children: [
+            { id: 'transactions', label: 'Transactions', href: '/dashboard/finance/transactions' },
+            { id: 'invoices', label: 'Invoices', href: '/dashboard/finance/invoices' },
+            { id: 'reports', label: 'Reports', href: '/dashboard/finance/reports' },
+          ]
+        },
+        { id: 'analytics', icon: Icons.BarChart3, label: 'Analytics', href: '/dashboard/analytics' },
       ]
     },
-    { 
-      id: 'agents', 
-      icon: Icons.Users, 
-      label: 'Agents', 
-      href: '/dashboard/agents',
-      children: [
-        { id: 'all-agents', label: 'All Agents', href: '/dashboard/agents' }
-        // { id: 'performance', label: 'Performance', href: '/dashboard/agents/performance' },
+    {
+      title: "System Monitoring",
+      items: [
+        { 
+          id: 'health-monitoring', 
+          icon: Activity, 
+          label: 'Health Check', 
+          href: '/dashboard/monitoring/health',
+          children: [
+            { id: 'system-health', label: 'System Health', href: '/dashboard/monitoring/health/system' },
+            // { id: 'api-health', label: 'API Health', href: '/dashboard/monitoring/health/api' },
+            { id: 'service-status', label: 'Service Status', href: '/dashboard/monitoring/health/services' },
+          ]
+        },
+        { 
+          id: 'database-monitoring', 
+          icon: Database, 
+          label: 'Database', 
+          href: '/dashboard/monitoring/database',
+          children: [
+            // { id: 'db-performance', label: 'Performance', href: '/dashboard/monitoring/database/performance' },
+            // { id: 'db-queries', label: 'Query Analysis', href: '/dashboard/monitoring/database/queries' },
+            { id: 'db-connections', label: 'Connections', href: '/dashboard/monitoring/database/connections' },
+          ]
+        },
+        { 
+          id: 'server-monitoring', 
+          icon: Server, 
+          label: 'Server Infrastructure', 
+          href: '/dashboard/monitoring/server',
+          children: [
+            { id: 'server-metrics', label: 'Server Metrics', href: '/dashboard/monitoring/server/metrics' },
+            { id: 'resource-usage', label: 'Resource Usage', href: '/dashboard/monitoring/server/resources' },
+            { id: 'uptime-status', label: 'Uptime Status', href: '/dashboard/monitoring/server/uptime' },
+          ]
+        },
       ]
     },
-    { id: 'Users', icon: Icons.User, label: 'Users', href: '/dashboard/users' },
-    { 
-      id: 'finance', 
-      icon: Icons.CreditCard, 
-      label: 'Finance', 
-      href: '/dashboard/finance/transactions',
-      children: [
-        { id: 'transactions', label: 'Transactions', href: '/dashboard/finance/transactions' },
-        { id: 'invoices', label: 'Invoices', href: '/dashboard/finance/invoices' },
-        { id: 'reports', label: 'Reports', href: '/dashboard/finance/reports' },
+    {
+      title: "Development & Deployment",
+      items: [
+        { 
+          id: 'code-management', 
+          icon: Code, 
+          label: 'Code Version', 
+          href: '/dashboard/development/code',
+          children: [
+            { id: 'version-control', label: 'Version Control', href: '/dashboard/development/code/versions' },
+            // { id: 'code-quality', label: 'Code Quality', href: '/dashboard/development/code/quality' },
+            // { id: 'dependencies', label: 'Dependencies', href: '/dashboard/development/code/dependencies' },
+          ]
+        },
+        { 
+          id: 'deployment', 
+          icon: Icons.Orbit, 
+          label: 'Deploy Status', 
+          href: '/dashboard/development/deploy',
+          children: [
+            { id: 'deployment-history', label: 'Deployment History', href: '/dashboard/development/deploy/history' },
+            { id: 'rollback-status', label: 'Rollback Status', href: '/dashboard/development/deploy/rollback' },
+            { id: 'environment-status', label: 'Environment Status', href: '/dashboard/development/deploy/environments' },
+          ]
+        },
+        { 
+          id: 'error-monitoring', 
+          icon: AlertTriangle, 
+          label: 'Error & Crash Reports', 
+          href: '/dashboard/monitoring/errors',
+          children: [
+            { id: 'error-logs', label: 'Error Logs', href: '/dashboard/monitoring/errors/logs' },
+            { id: 'crash-reports', label: 'Crash Reports', href: '/dashboard/monitoring/errors/crashes' },
+            { id: 'performance-issues', label: 'Performance Issues', href: '/dashboard/monitoring/errors/performance' },
+          ]
+        },
       ]
     },
-    { id: 'analytics', icon: Icons.BarChart3, label: 'Analytics', href: '/dashboard/analytics' },
-    { id: 'settings', icon: Icons.Settings, label: 'Settings', href: '/dashboard/settings' },
+    {
+      title: "Communication & Logs",
+      items: [
+        { 
+          id: 'communication', 
+          icon: MessageSquare, 
+          label: 'Communication', 
+          href: '/dashboard/communication',
+          children: [
+            // { id: 'sms-monitoring', label: 'SMS Monitoring', href: '/dashboard/communication/sms' },
+            // { id: 'whatsapp-monitoring', label: 'WhatsApp Monitoring', href: '/dashboard/communication/whatsapp' },
+            // { id: 'push-notifications', label: 'Push Notifications', href: '/dashboard/communication/push' },
+            { id: 'email-tracking', label: 'Email Tracking', href: '/dashboard/communication/email' },
+          ]
+        },
+        { 
+          id: 'system-logs', 
+          icon: FileText, 
+          label: 'System Logs', 
+          href: '/dashboard/logs',
+          children: [
+            { id: 'application-logs', label: 'Application Logs', href: '/dashboard/logs/application' },
+            { id: 'access-logs', label: 'Access Logs', href: '/dashboard/logs/access' },
+            { id: 'audit-logs', label: 'Audit Logs', href: '/dashboard/logs/audit' },
+          ]
+        },
+      ]
+    },
+    {
+      title: "Security & Compliance",
+      items: [
+        { 
+          id: 'security-monitoring', 
+          icon: Shield, 
+          label: 'Security Monitoring', 
+          href: '/dashboard/security',
+          children: [
+            { id: 'brute-force-alerts', label: 'Brute Force Alerts', href: '/dashboard/security/brute-force' },
+            { id: 'blocked-ips', label: 'Blocked IP List', href: '/dashboard/security/blocked-ips' },
+            { id: 'suspicious-activity', label: 'Suspicious Activity', href: '/dashboard/security/suspicious' },
+            { id: 'login-attempts', label: 'Login Attempts', href: '/dashboard/security/login-attempts' },
+          ]
+        },
+      ]
+    },
+    {
+      title: "Configuration",
+      items: [
+        { id: 'settings', icon: Icons.Settings, label: 'Settings', href: '/dashboard/settings' },
+      ]
+    }
   ]
 
   useEffect(() => {
@@ -114,16 +272,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="px-6 py-5 border-b border-gray-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              {/* <div className="w-8 h-8 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-semibold">EP</span>
-              </div> */}
               <div>
                 <Image
                   src="/uhilogo.svg"
                   alt="Logo"
                   width={32}
                   height={32}
-                  // className='rotate-45'
                 />
               </div>
               <div>
@@ -141,70 +295,97 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon
-            const isExpanded = expandedItems.includes(item.id)
-            const hasChildren = item.children && item.children.length > 0
-            const isActive = activeTab === item.id || (hasChildren && item.children?.some(child => activeTab === child.id))
-            
-            return (
-              <div key={item.id} className="space-y-1">
-                <button
-                  onClick={() => {
-                    if (hasChildren) {
-                      toggleExpanded(item.id)
-                    } else {
-                      setSidebarOpen(false)
-                      router.push(item.href)
-                    }
-                  }}
-                  className={`w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-[#1A1A1A]'
-                  }`}
-                >
-                  <Icon size={16} className="mr-3" />
-                  <span className="flex-1 text-left">{item.label}</span>
+        <nav className="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
+          {sidebarSections.map((section, sectionIndex) => (
+            <div key={section.title} className="space-y-2">
+              {/* Section Title */}
+              <div className="px-3">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  {section.title}
+                </h3>
+              </div>
+              
+              {/* Section Items */}
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const Icon = item.icon
+                  const isExpanded = expandedItems.includes(item.id)
+                  const hasChildren = item.children && item.children.length > 0
+                  const isActive = activeTab === item.id
+                  const hasActiveChild = hasChildren && item.children?.some(child => activeTab === child.id)
                   
-                  {hasChildren && (
-                    <div className={`transition-transform duration-200 ${
-                      isExpanded ? 'rotate-90' : ''
-                    }`}>
-                      <ChevronRight size={14} className={isActive ? 'text-white/80' : 'text-gray-400'} />
-                    </div>
-                  )}
-                </button>
-                
-                {/* Children */}
-                {hasChildren && isExpanded && (
-                  <div className="ml-6 space-y-1 animate-in slide-in-from-top-1 duration-200">
-                    {item.children?.map((child) => (
-                      <Link
-                        key={child.id}
-                        href={child.href}
+                  return (
+                    <div key={item.id} className="space-y-1">
+                      <button
                         onClick={() => {
-                          setSidebarOpen(false)
-                          router.push(child.href)
+                          if (hasChildren) {
+                            toggleExpanded(item.id)
+                          } else {
+                            setSidebarOpen(false)
+                            setActiveTab(item.id)
+                            router.push(item.href)
+                          }
                         }}
-                        className={`block px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
-                          activeTab === child.id
-                            ? 'bg-gradient-to-r from-gray-100 to-gray-50 text-[#1A1A1A] font-medium border-l-2 border-[#1A1A1A]'
-                            : 'text-gray-600 hover:bg-gray-50 hover:text-[#1A1A1A] hover:translate-x-1'
+                        className={`w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isActive || hasActiveChild
+                            ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-[#1A1A1A]'
                         }`}
                       >
-                        <span className="flex items-center">
-                          <div className="w-2 h-2 rounded-full bg-gray-300 mr-3"></div>
-                          {child.label}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                        <Icon size={16} className="mr-3" />
+                        <span className="flex-1 text-left">{item.label}</span>
+                        
+                        {hasChildren && (
+                          <div className={`transition-transform duration-200 ${
+                            isExpanded ? 'rotate-90' : ''
+                          }`}>
+                            <ChevronRight size={14} className={isActive || hasActiveChild ? 'text-white/80' : 'text-gray-400'} />
+                          </div>
+                        )}
+                      </button>
+                      
+                      {/* Children */}
+                      {hasChildren && isExpanded && (
+                        <div className="ml-6 space-y-1 animate-in slide-in-from-top-1 duration-200">
+                          {item.children?.map((child) => {
+                            const isChildActive = activeTab === child.id
+                            return (
+                              <Link
+                                key={child.id}
+                                href={child.href}
+                                onClick={() => {
+                                  setSidebarOpen(false)
+                                  setActiveTab(child.id)
+                                  router.push(child.href)
+                                }}
+                                className={`block px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                                  isChildActive
+                                    ? 'bg-gradient-to-r from-gray-100 to-gray-50 text-[#1A1A1A] font-medium border-l-2 border-red-500'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-[#1A1A1A] hover:translate-x-1'
+                                }`}
+                              >
+                                <span className="flex items-center">
+                                  <div className={`w-2 h-2 rounded-full mr-3 ${
+                                    isChildActive ? 'bg-red-500' : 'bg-gray-300'
+                                  }`}></div>
+                                  {child.label}
+                                </span>
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
-            )
-          })}
+              
+              {/* Divider - except for last section */}
+              {sectionIndex < sidebarSections.length - 1 && (
+                <div className="border-t border-gray-100 pt-2"></div>
+              )}
+            </div>
+          ))}
         </nav>
 
         {/* User section */}
