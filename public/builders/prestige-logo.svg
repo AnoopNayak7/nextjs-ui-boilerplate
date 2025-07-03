@@ -1,0 +1,7 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" rx="20" fill="#F3F4F6"/>
+  <path d="M40 100C40 66.8629 66.8629 40 100 40C133.137 40 160 66.8629 160 100C160 133.137 133.137 160 100 160C66.8629 160 40 133.137 40 100Z" fill="#DC2626"/>
+  <path d="M100 65L120 95H80L100 65Z" fill="white"/>
+  <path d="M70 105H130V135H70V105Z" fill="white"/>
+  <text x="100" y="180" text-anchor="middle" font-family="Arial" font-size="16" fill="#111827">PRESTIGE</text>
+</svg>

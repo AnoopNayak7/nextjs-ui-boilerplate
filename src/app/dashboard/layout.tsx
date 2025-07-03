@@ -25,7 +25,8 @@ import {
   FileText,
   Shield,
   UserX,
-  Ban
+  Ban,
+  Building2
 } from 'lucide-react'
 import Image from 'next/image'
 
@@ -74,6 +75,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       items: [
         { id: 'dashboard', icon: Icons.LayoutDashboard, label: 'Overview', href: '/dashboard' },
         { 
+          id: 'data-management', 
+          icon: Icons.Database, 
+          label: 'Data Management', 
+          href: '/dashboard/data-management',
+          children: [
+            { id: 'locations', label: 'Locations', href: '/dashboard/data-management/locations' }
+          ]
+        },
+        { 
           id: 'properties', 
           icon: Icons.Home, 
           label: 'Properties', 
@@ -94,6 +104,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           ]
         },
         { id: 'users', icon: Icons.User, label: 'Users', href: '/dashboard/users' },
+        { 
+          id: 'builders', 
+          icon: Icons.Building2, 
+          label: 'Builders', 
+          href: '/dashboard/builders',
+          children: [
+            { id: 'all-builders', label: 'All Builders', href: '/dashboard/builders' }
+          ]
+        },
         { 
           id: 'finance', 
           icon: Icons.CreditCard, 
@@ -419,7 +438,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               
               <div>
                 <h2 className="text-lg font-semibold text-[#1A1A1A]">
-                  Welcome back, {user.data.firstName.split(' ')[1]}
+                  Welcome back, {user?.data?.firstName?.split(' ')[0]}
                 </h2>
                 <p className="text-sm text-gray-500">Your real estate business at a glance</p>
               </div>

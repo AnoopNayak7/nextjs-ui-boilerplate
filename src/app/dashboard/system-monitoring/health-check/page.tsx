@@ -1,27 +1,38 @@
 'use client'
 
-import { HeartPulse, Server, HardDrive, Activity, AlertCircle } from 'lucide-react'
+import { HeartPulse, Server, HardDrive, Activity, AlertCircle, Loader2 } from 'lucide-react'
 
-const healthChecks = [
+import { useState, useEffect } from 'react'
+import axios from '@/lib/axios'
+
+interface HealthCheck {
+  name: string
+  status: 'healthy' | 'degraded' | 'offline'
+  responseTime: string
+  uptime: string
+  icon: any
+}
+
+const defaultHealthChecks: HealthCheck[] = [
   {
     name: 'API Server',
-    status: 'healthy',
-    responseTime: '120ms',
-    uptime: '99.98%',
+    status: 'offline',
+    responseTime: '--',
+    uptime: '--',
     icon: Server,
   },
   {
     name: 'Database',
-    status: 'healthy',
-    responseTime: '95ms',
-    uptime: '99.95%',
+    status: 'offline',
+    responseTime: '--',
+    uptime: '--',
     icon: HardDrive,
   },
   {
     name: 'Authentication Service',
-    status: 'degraded',
-    responseTime: '280ms',
-    uptime: '97.23%',
+    status: 'offline',
+    responseTime: '--',
+    uptime: '--',
     icon: Activity,
   },
   {
@@ -33,7 +44,62 @@ const healthChecks = [
   }
 ]
 
-const getStatusClass = (status: string) => {
+export default function HealthCheckPage() {
+  const [healthChecks, setHealthChecks] = useState<HealthCheck[]>(defaultHealthChecks)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+  const fetchHealthStatus = async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get('/health')
+      const healthData = response.data
+
+      setHealthChecks([
+        {
+          name: 'API Server',
+          status: healthData.api.status,
+          responseTime: `${healthData.api.responseTime}ms`,
+          uptime: healthData.api.uptime,
+          icon: Server,
+        },
+        {
+          name: 'Database',
+          status: healthData.database.status,
+          responseTime: `${healthData.database.responseTime}ms`,
+          uptime: healthData.database.uptime,
+          icon: HardDrive,
+        },
+        {
+          name: 'Authentication Service',
+          status: healthData.auth.status,
+          responseTime: `${healthData.auth.responseTime}ms`,
+          uptime: healthData.auth.uptime,
+          icon: Activity,
+        },
+        {
+          name: 'Redis Cache',
+          status: healthData.cache.status,
+          responseTime: `${healthData.cache.responseTime}ms`,
+          uptime: healthData.cache.uptime,
+          icon: AlertCircle,
+        }
+      ])
+    } catch (error) {
+      console.error('Failed to fetch health status:', error)
+      setHealthChecks(defaultHealthChecks)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  fetchHealthStatus()
+  const interval = setInterval(fetchHealthStatus, 30000) // Refresh every 30 seconds
+
+  return () => clearInterval(interval)
+  }, [])
+
+  const getStatusClass = (status: string) => {
   switch (status) {
     case 'healthy':
       return 'bg-green-100 text-green-800 border-green-200'
@@ -46,7 +112,14 @@ const getStatusClass = (status: string) => {
   }
 }
 
-export default function HealthCheckPage() {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-8">

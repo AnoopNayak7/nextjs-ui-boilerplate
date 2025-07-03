@@ -170,7 +170,7 @@ export default function DashboardPage() {
       hoverBorder: 'hover:border-violet-200',
       stats: [
         { label: 'Active', value: '173', icon: UserCheck, color: 'text-emerald-600' },
-        { label: 'Top Performer', value: 'Sarah M.', icon: Star, color: 'text-yellow-600' },
+        // { label: 'Top Performer', value: 'Sarah M.', icon: Star, color: 'text-yellow-600' },
         { label: 'This Month', value: '45', icon: TrendingUp, color: 'text-violet-600' },
       ],
     },
