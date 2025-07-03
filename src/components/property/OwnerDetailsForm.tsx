@@ -16,9 +16,10 @@ interface OwnerDetailsFormProps {
   ownerType: 'builder' | 'broker' | 'individual' | 'company'
   onSubmit: (details: OwnerDetails) => void
   initialValues?: Partial<OwnerDetails>
+  isSaving?: boolean
 }
 
-export default function OwnerDetailsForm({ ownerType, onSubmit, initialValues = {} }: OwnerDetailsFormProps) {
+export default function OwnerDetailsForm({ ownerType, onSubmit, initialValues = {}, isSaving = false }: OwnerDetailsFormProps) {
   const [details, setDetails] = useState<OwnerDetails>({
     name: initialValues.name || '',
     email: initialValues.email || '',
@@ -191,9 +192,10 @@ export default function OwnerDetailsForm({ ownerType, onSubmit, initialValues = 
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white rounded-lg transition-colors text-sm font-medium`}
         >
-          Save Details
+          {isSaving ? 'Saving...' : 'Save Details'}
         </button>
       </div>
     </form>

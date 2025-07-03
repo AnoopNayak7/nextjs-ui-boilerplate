@@ -70,17 +70,81 @@ export default function AddPropertyPage() {
   })
 
   const handleStepSubmit = (data: any) => {
-    setFormData(prev => ({
-      ...prev,
+    const updatedFormData = {
+      ...formData,
       [STEPS[currentStep].id]: data
-    }))
+    };
+    
+    setFormData(updatedFormData);
 
     if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1)
+      setCurrentStep(prev => prev + 1);
     } else {
       // Submit the complete form data
-      console.log('Final form data:', { ownerType, ...formData })
-      router.push('/dashboard/properties')
+      submitProperty(updatedFormData);
+    }
+  }
+  
+  const submitProperty = async (data: any) => {
+    try {
+      // Prepare the property data
+      const propertyData = {
+        // Basic details
+        title: data.basicDetails.title,
+        type: data.basicDetails.type,
+        propertyType: data.basicDetails.propertyType, // rent or sell
+        bhk: data.basicDetails.bhk,
+        superBuiltUpArea: data.basicDetails.superBuiltUpArea,
+        carpetArea: data.basicDetails.carpetArea,
+        floor: data.basicDetails.floor,
+        totalFloors: data.basicDetails.totalFloors,
+        age: data.basicDetails.age,
+        parking: data.basicDetails.parking,
+        facing: data.basicDetails.facing,
+        reraNumber: data.basicDetails.reraNumber,
+        price: data.basicDetails.price,
+        description: data.basicDetails.description,
+        
+        // Owner type
+        ownerType: ownerType,
+        
+        // Agent or Builder ID if selected
+        agentId: data.basicDetails.agentId,
+        builderId: data.basicDetails.builderId,
+        
+        // Other form sections
+        media: data.media,
+        pricing: data.pricing,
+        documents: data.documents,
+        nearbyPlaces: data.nearbyPlaces,
+        bankApprovals: data.bankApprovals,
+        
+        // Default status
+        status: 'draft'
+      };
+      
+      // Call the API to create the property
+      const response = await fetch('/api/v1/properties', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(propertyData),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Redirect to properties page on success
+        router.push('/dashboard/properties');
+      } else {
+        // Handle error
+        console.error('Error creating property:', result.error);
+        alert('Failed to create property: ' + result.error.message);
+      }
+    } catch (error) {
+      console.error('Error submitting property:', error);
+      alert('An error occurred while creating the property. Please try again.');
     }
   }
 

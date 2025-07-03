@@ -14,6 +14,7 @@ interface LegalDocument {
 interface LegalDocumentsFormProps {
   onSubmit: (documents: LegalDocument[]) => void
   initialDocuments?: LegalDocument[]
+  isSaving?: boolean
 }
 
 const DOCUMENT_CATEGORIES = [
@@ -23,7 +24,7 @@ const DOCUMENT_CATEGORIES = [
   { id: 'other', label: 'Other Documents' }
 ] as const
 
-export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: LegalDocumentsFormProps) {
+export default function LegalDocumentsForm({ onSubmit, initialDocuments = [], isSaving = false }: LegalDocumentsFormProps) {
   const [documents, setDocuments] = useState<LegalDocument[]>(initialDocuments)
   const [selectedCategory, setSelectedCategory] = useState<typeof DOCUMENT_CATEGORIES[number]['id']>('rera')
   const [dragActive, setDragActive] = useState(false)
@@ -212,9 +213,10 @@ export default function LegalDocumentsForm({ onSubmit, initialDocuments = [] }: 
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 text-white rounded-lg transition-colors text-sm font-medium ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
         >
-          Save Documents
+          {isSaving ? 'Saving...' : 'Save Documents'}
         </button>
       </div>
     </form>

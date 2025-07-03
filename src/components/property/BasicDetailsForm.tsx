@@ -5,6 +5,7 @@ import { useState } from 'react'
 interface PropertyBasicDetails {
   title: string
   type: string
+  propertyType: string // rent or sell
   bhk: string
   superBuiltUpArea: string
   carpetArea: string
@@ -16,17 +17,21 @@ interface PropertyBasicDetails {
   reraNumber: string
   price: string
   description: string
+  agentId?: string
+  builderId?: string
 }
 
 interface BasicDetailsFormProps {
   onSubmit: (details: PropertyBasicDetails) => void
   initialValues?: Partial<PropertyBasicDetails>
+  isSaving?: boolean
 }
 
-export default function BasicDetailsForm({ onSubmit, initialValues = {} }: BasicDetailsFormProps) {
+export default function BasicDetailsForm({ onSubmit, initialValues = {}, isSaving = false }: BasicDetailsFormProps) {
   const [details, setDetails] = useState<PropertyBasicDetails>({
     title: initialValues.title || '',
     type: initialValues.type || '',
+    propertyType: initialValues.propertyType || 'sell',
     bhk: initialValues.bhk || '',
     superBuiltUpArea: initialValues.superBuiltUpArea || '',
     carpetArea: initialValues.carpetArea || '',
@@ -37,14 +42,26 @@ export default function BasicDetailsForm({ onSubmit, initialValues = {} }: Basic
     facing: initialValues.facing || '',
     reraNumber: initialValues.reraNumber || '',
     price: initialValues.price || '',
-    description: initialValues.description || ''
+    description: initialValues.description || '',
+    agentId: initialValues.agentId || '',
+    builderId: initialValues.builderId || ''
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof PropertyBasicDetails, string>>>({})
 
   const propertyTypes = ['Apartment', 'Villa', 'House', 'Penthouse', 'Studio', 'Plot', 'Commercial']
+  const propertyListingTypes = ['rent', 'sell']
   const bhkOptions = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '5 BHK', '5+ BHK']
   const facingOptions = ['North', 'South', 'East', 'West', 'North-East', 'North-West', 'South-East', 'South-West']
+  
+  // State for agent/builder selection
+  const [searchTerm, setSearchTerm] = useState('')
+  const [agentResults, setAgentResults] = useState<any[]>([])
+  const [builderResults, setBuilderResults] = useState<any[]>([])
+  const [showAgentDropdown, setShowAgentDropdown] = useState(false)
+  const [showBuilderDropdown, setShowBuilderDropdown] = useState(false)
+  const [selectedAgent, setSelectedAgent] = useState<any>(null)
+  const [selectedBuilder, setSelectedBuilder] = useState<any>(null)
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof PropertyBasicDetails, string>> = {}
@@ -55,6 +72,10 @@ export default function BasicDetailsForm({ onSubmit, initialValues = {} }: Basic
 
     if (!details.type) {
       newErrors.type = 'Property type is required'
+    }
+    
+    if (!details.propertyType) {
+      newErrors.propertyType = 'Property listing type is required'
     }
 
     if (!details.superBuiltUpArea.trim()) {
@@ -87,6 +108,45 @@ export default function BasicDetailsForm({ onSubmit, initialValues = {} }: Basic
     }
   }
 
+  // Function to search agents and builders
+  const handleSearch = async (term: string) => {
+    setSearchTerm(term)
+    
+    if (term.length < 2) {
+      setAgentResults([])
+      setBuilderResults([])
+      return
+    }
+    
+    try {
+      // Search agents
+      const agentsResponse = await fetch(`/api/v1/agents?search=${term}`)
+      const agentsData = await agentsResponse.json()
+      setAgentResults(agentsData.data?.items || [])
+      
+      // Search builders
+      const buildersResponse = await fetch(`/api/v1/builders?search=${term}`)
+      const buildersData = await buildersResponse.json()
+      setBuilderResults(buildersData.data?.items || [])
+    } catch (error) {
+      console.error('Error searching:', error)
+    }
+  }
+  
+  // Function to select an agent
+  const selectAgent = (agent: any) => {
+    setSelectedAgent(agent)
+    setDetails(prev => ({ ...prev, agentId: agent.id }))
+    setShowAgentDropdown(false)
+  }
+  
+  // Function to select a builder
+  const selectBuilder = (builder: any) => {
+    setSelectedBuilder(builder)
+    setDetails(prev => ({ ...prev, builderId: builder.id }))
+    setShowBuilderDropdown(false)
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -104,6 +164,23 @@ export default function BasicDetailsForm({ onSubmit, initialValues = {} }: Basic
               placeholder="Enter property title"
             />
             {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title}</p>}
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Property Listing Type
+            </label>
+            <select
+              value={details.propertyType}
+              onChange={(e) => handleChange('propertyType', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg text-sm ${errors.propertyType ? 'border-red-500' : 'border-gray-300'}`}
+            >
+              <option value="">Select listing type</option>
+              {propertyListingTypes.map(type => (
+                <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+              ))}
+            </select>
+            {errors.propertyType && <p className="mt-1 text-xs text-red-500">{errors.propertyType}</p>}
           </div>
 
           <div>
@@ -268,12 +345,112 @@ export default function BasicDetailsForm({ onSubmit, initialValues = {} }: Basic
         />
       </div>
 
+      {/* Agent/Builder Selection */}
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Agent (Optional)
+          </label>
+          <div className="relative">
+            <div className="flex items-center">
+              <input
+                type="text"
+                placeholder="Search for an agent"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                onFocus={() => setShowAgentDropdown(true)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+              {selectedAgent && (
+                <div className="ml-2 px-3 py-1 bg-gray-100 rounded-lg flex items-center">
+                  <span className="text-sm">{selectedAgent.firstName} {selectedAgent.lastName}</span>
+                  <button 
+                    type="button" 
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => {
+                      setSelectedAgent(null)
+                      setDetails(prev => ({ ...prev, agentId: '' }))
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {showAgentDropdown && agentResults.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                {agentResults.map(agent => (
+                  <div 
+                    key={agent.id} 
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => selectAgent(agent)}
+                  >
+                    <div className="font-medium">{agent.firstName} {agent.lastName}</div>
+                    <div className="text-xs text-gray-500">{agent.agentType}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Builder (Optional)
+          </label>
+          <div className="relative">
+            <div className="flex items-center">
+              <input
+                type="text"
+                placeholder="Search for a builder"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                onFocus={() => setShowBuilderDropdown(true)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+              {selectedBuilder && (
+                <div className="ml-2 px-3 py-1 bg-gray-100 rounded-lg flex items-center">
+                  <span className="text-sm">{selectedBuilder.companyName}</span>
+                  <button 
+                    type="button" 
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => {
+                      setSelectedBuilder(null)
+                      setDetails(prev => ({ ...prev, builderId: '' }))
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {showBuilderDropdown && builderResults.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                {builderResults.map(builder => (
+                  <div 
+                    key={builder.id} 
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => selectBuilder(builder)}
+                  >
+                    <div className="font-medium">{builder.companyName}</div>
+                    <div className="text-xs text-gray-500">{builder.city}, {builder.state}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white rounded-lg transition-colors text-sm font-medium`}
         >
-          Save Details
+          {isSaving ? 'Saving...' : 'Save Details'}
         </button>
       </div>
     </form>

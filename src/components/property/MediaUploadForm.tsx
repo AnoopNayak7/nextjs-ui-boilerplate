@@ -22,10 +22,16 @@ interface MediaUploadFormProps {
   onSubmit: (data: { images: PropertyImage[], floorPlans: FloorPlan[] }) => void
   initialImages?: PropertyImage[]
   initialFloorPlans?: FloorPlan[]
+  initialData?: {
+    images?: PropertyImage[]
+  }
+  isSaving?: boolean
 }
 
-export default function MediaUploadForm({ onSubmit, initialImages = [], initialFloorPlans = [] }: MediaUploadFormProps) {
-  const [images, setImages] = useState<PropertyImage[]>(initialImages)
+export default function MediaUploadForm({ onSubmit, initialImages = [], initialFloorPlans = [], initialData = {}, isSaving = false }: MediaUploadFormProps) {
+  // Use initialData.images if provided, otherwise fall back to initialImages
+  const startingImages = initialData?.images || initialImages
+  const [images, setImages] = useState<PropertyImage[]>(startingImages)
   const [floorPlans, setFloorPlans] = useState<FloorPlan[]>(initialFloorPlans)
   const [dragActive, setDragActive] = useState(false)
   const [activeTab, setActiveTab] = useState<'images' | 'floorPlans'>('images')
@@ -264,9 +270,10 @@ export default function MediaUploadForm({ onSubmit, initialImages = [], initialF
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white rounded-lg transition-colors text-sm font-medium`}
         >
-          Save Media
+          {isSaving ? 'Saving...' : 'Save Media'}
         </button>
       </div>
     </form>

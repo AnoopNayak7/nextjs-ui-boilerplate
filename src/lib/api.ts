@@ -132,6 +132,27 @@ export const agentsApi = {
   },
 };
 
+// Builders API endpoints
+export const buildersApi = {
+  getAll: async (params?: any) => {
+    try {
+      const response = await axiosInstance.get('/builders', { params });
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+  
+  getById: async (id: string) => {
+    try {
+      const response = await axiosInstance.get(`/builders/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+};
+
 // Users API endpoints
 export const usersApi = {
   getAll: async (params?: any) => {

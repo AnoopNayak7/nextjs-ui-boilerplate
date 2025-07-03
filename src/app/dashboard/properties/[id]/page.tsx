@@ -1,14 +1,63 @@
 'use client'
 
-import { Activity, Award, Briefcase, Building, Calendar, Car, Check, CheckCircle, ChevronDown, Clock, Compass, Edit3, Eye, FileText, GraduationCap, Home, Landmark, MapPin, Plus, Save, Shield, ShoppingCart, Star, Train, Trash2, Upload, User, X } from 'lucide-react'
-import { useState } from 'react'
+import { Activity, Award, Briefcase, Building, Calendar, Car, Check, CheckCircle, ChevronDown, Clock, Compass, Edit3, Eye, FileText, GraduationCap, Home, Landmark, MapPin, Plus, Save, Shield, ShoppingCart, Star, Train, Trash2, Upload, User, X, ArrowLeft, DollarSign, Edit } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import FloorPlanModal from '@/components/modals/FloorPlanModal'
 import LegalDocumentModal from '@/components/modals/LegalDocumentModal'
 import PropertyEditModal from '@/components/modals/PropertyEditModal'
 import ImageUploadModal from '@/components/modals/ImageUploadModal'
 import AmenitiesModal from '@/components/modals/AmenitiesModal'
+import { formatPrice } from '@/lib/utils'
 
-export default function PropertyDetailPage() {
+export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
+  const [propertyData, setPropertyData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/v1/properties/${params.id}`)
+        const result = await response.json()
+        
+        if (result.success) {
+          setPropertyData(result.data)
+        } else {
+          setError(result.error?.message || 'Failed to fetch property details')
+        }
+      } catch (error) {
+        console.error('Error fetching property:', error)
+        setError('An error occurred while fetching property details')
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchProperty()
+  }, [params.id])
+  
+  const handleDelete = async () => {
+    if (confirm('Are you sure you want to delete this property?')) {
+      try {
+        const response = await fetch(`/api/v1/properties/${params.id}`, {
+          method: 'DELETE',
+        })
+        const result = await response.json()
+        
+        if (result.success) {
+          router.push('/dashboard/properties')
+        } else {
+          alert('Failed to delete property: ' + result.error?.message)
+        }
+      } catch (error) {
+        console.error('Error deleting property:', error)
+        alert('An error occurred while deleting the property')
+      }
+    }
+  }
   const [isEditing, setIsEditing] = useState(false)
   const [selectedBanks, setSelectedBanks] = useState(['HDFC', 'SBI'])
   const [showBankDropdown, setShowBankDropdown] = useState(false)
@@ -26,7 +75,8 @@ export default function PropertyDetailPage() {
   const [showImageUploadModal, setShowImageUploadModal] = useState(false)
   const [showAmenitiesModal, setShowAmenitiesModal] = useState(false)
 
-  const property:any = {
+  // Sample property data to use as fallback
+  const samplePropertyData:any = {
     id: '1',
     title: 'Luxury Villa with Swimming Pool',
     type: 'Villa',
@@ -158,8 +208,67 @@ export default function PropertyDetailPage() {
     </div>
   )
 
+  if (loading) {
+    return (
+      <div className="p-6 bg-white rounded-xl shadow-sm">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-64 bg-gray-200 rounded"></div>
+          <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 bg-white rounded-xl shadow-sm">
+        <div className="text-center py-12">
+          <div className="text-red-500 text-lg mb-2">{error}</div>
+          <button 
+            onClick={() => router.push('/dashboard/properties')}
+            className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            Back to Properties
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Use API data if available, otherwise fall back to sample data
+  const property = propertyData || samplePropertyData
+  
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* Header with back button and actions */}
+      <div className="flex items-center justify-between mb-4">
+        <button 
+          onClick={() => router.push('/dashboard/properties')}
+          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          Back to Properties
+        </button>
+        
+        <div className="flex space-x-2">
+          <button 
+            onClick={() => router.push(`/dashboard/properties/${params.id}/edit`)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <Edit size={16} className="mr-2" />
+            Edit
+          </button>
+          <button 
+            onClick={handleDelete}
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center"
+          >
+            <Trash2 size={16} className="mr-2" />
+            Delete
+          </button>
+        </div>
+      </div>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>
@@ -169,7 +278,7 @@ export default function PropertyDetailPage() {
         <div className="flex items-center space-x-3">
           <span className="text-xl font-bold text-gray-900">₹{(property.price / 10000000).toFixed(2)} Cr</span>
           <button 
-            onClick={() => setShowPropertyEditModal(true)}
+            onClick={() => router.push(`/dashboard/properties/${params.id}/edit`)}
             className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2 text-sm"
           >
             <Edit3 size={14} />

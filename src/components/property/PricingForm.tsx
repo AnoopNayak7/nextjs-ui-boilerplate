@@ -6,6 +6,7 @@ import { Currency, IndianRupee, Info } from 'lucide-react'
 interface PricingFormProps {
   onSubmit: (data: PricingDetails) => void
   initialData?: PricingDetails
+  isSaving?: boolean
 }
 
 interface PricingDetails {
@@ -35,7 +36,7 @@ const DEFAULT_PRICING: PricingDetails = {
   paymentPlan: 'full'
 }
 
-export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }: PricingFormProps) {
+export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, isSaving = false }: PricingFormProps) {
   const [pricing, setPricing] = useState<PricingDetails>(initialData)
   const [milestones, setMilestones] = useState<PaymentMilestone[]>(initialData.customPaymentPlan || [])
   const [newMilestone, setNewMilestone] = useState({ milestone: '', percentage: 0 })
@@ -340,9 +341,10 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING }:
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 text-white rounded-lg transition-colors text-sm font-medium ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
         >
-          Save Pricing Details
+          {isSaving ? 'Saving...' : 'Save Pricing Details'}
         </button>
       </div>
     </form>

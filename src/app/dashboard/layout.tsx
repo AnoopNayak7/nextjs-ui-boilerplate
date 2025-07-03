@@ -253,8 +253,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   
   if (!user) return null
 
-  console.log("nav gottala", user.data.firstName)
-
   return (
     <div className="flex h-screen bg-gray-50 font-inter">
       {/* Mobile overlay */}

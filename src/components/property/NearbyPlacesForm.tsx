@@ -13,6 +13,10 @@ interface NearbyPlace {
 interface NearbyPlacesFormProps {
   onSubmit: (places: NearbyPlace[]) => void
   initialPlaces?: NearbyPlace[]
+  initialData?: {
+    distances?: NearbyPlace[]
+  }
+  isSaving?: boolean
 }
 
 const PLACE_CATEGORIES = [
@@ -28,8 +32,10 @@ const PLACE_CATEGORIES = [
   'Other'
 ] as const
 
-export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: NearbyPlacesFormProps) {
-  const [places, setPlaces] = useState<NearbyPlace[]>(initialPlaces)
+export default function NearbyPlacesForm({ onSubmit, initialPlaces = [], initialData = {}, isSaving = false }: NearbyPlacesFormProps) {
+  // Use initialData.distances if provided, otherwise fall back to initialPlaces
+  const startingPlaces = initialData?.distances || initialPlaces
+  const [places, setPlaces] = useState<NearbyPlace[]>(startingPlaces)
   const [newPlace, setNewPlace] = useState<{
     name: string;
     category: typeof PLACE_CATEGORIES[number];
@@ -182,9 +188,10 @@ export default function NearbyPlacesForm({ onSubmit, initialPlaces = [] }: Nearb
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 text-white rounded-lg transition-colors text-sm font-medium ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
         >
-          Save Places
+          {isSaving ? 'Saving...' : 'Save Places'}
         </button>
       </div>
     </form>

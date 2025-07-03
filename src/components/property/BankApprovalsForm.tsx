@@ -14,6 +14,10 @@ interface BankApproval {
 interface BankApprovalsFormProps {
   onSubmit: (approvals: BankApproval[]) => void
   initialApprovals?: BankApproval[]
+  initialData?: {
+    banks?: BankApproval[]
+  }
+  isSaving?: boolean
 }
 
 const POPULAR_BANKS = [
@@ -29,8 +33,10 @@ const POPULAR_BANKS = [
   'Yes Bank'
 ] as const
 
-export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: BankApprovalsFormProps) {
-  const [approvals, setApprovals] = useState<BankApproval[]>(initialApprovals)
+export default function BankApprovalsForm({ onSubmit, initialApprovals = [], initialData = {}, isSaving = false }: BankApprovalsFormProps) {
+  // Use initialData.banks if provided, otherwise fall back to initialApprovals
+  const startingApprovals = initialData?.banks || initialApprovals
+  const [approvals, setApprovals] = useState<BankApproval[]>(startingApprovals)
   const [newApproval, setNewApproval] = useState<{
     bankName: string;
     status: BankApproval['status'];
@@ -248,9 +254,10 @@ export default function BankApprovalsForm({ onSubmit, initialApprovals = [] }: B
       <div className="flex justify-end">
         <button
           type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+          disabled={isSaving}
+          className={`px-4 py-2 text-white rounded-lg transition-colors text-sm font-medium ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
         >
-          Save Approvals
+          {isSaving ? 'Saving...' : 'Save Approvals'}
         </button>
       </div>
     </form>
