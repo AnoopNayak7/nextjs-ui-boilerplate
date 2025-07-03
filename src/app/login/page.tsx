@@ -1,15 +1,35 @@
 'use client';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, Check, AlertCircle } from 'lucide-react'
+import { useAuth } from '@/context/auth-context'
+import { getCookie } from 'cookies-next'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('ialirezamp@gmail.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { login, user, error: authError } = useAuth()
+  const router = useRouter()
 
   const isValidEmail = email.includes('@') && email.includes('.')
+
+  // Redirect if already logged in
+  useEffect(() => {
+    const token = getCookie('auth_token')
+    if (token || user) {
+      router.push('/dashboard')
+    }
+  }, [user, router])
+
+  // Set error from auth context
+  useEffect(() => {
+    if (authError) {
+      setError(authError)
+    }
+  }, [authError])
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -20,12 +40,12 @@ export default function LoginPage() {
     setIsLoading(true)
     setError('')
     try {
-      setTimeout(() => {
-        setIsLoading(false)
-        console.log('Login attempt:', { email, password })
-      }, 1500)
-    } catch (err) {
-      setError('Invalid credentials')
+      await login(email, password)
+      // Remove router.push here as it's handled by the useEffect
+    } catch (err: any) {
+      // Error is handled by auth context and displayed via the useEffect above
+      console.error('Login error:', err)
+    } finally {
       setIsLoading(false)
     }
   }

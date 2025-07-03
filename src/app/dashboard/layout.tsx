@@ -30,7 +30,7 @@ import {
 import Image from 'next/image'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useAuth()
+  const { user, isLoading, logout } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('')
 
@@ -253,6 +253,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   
   if (!user) return null
 
+  console.log("nav gottala", user.data.firstName)
+
   return (
     <div className="flex h-screen bg-gray-50 font-inter">
       {/* Mobile overlay */}
@@ -419,7 +421,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               
               <div>
                 <h2 className="text-lg font-semibold text-[#1A1A1A]">
-                  Welcome back, {user.name?.split(' ')[0]}
+                  Welcome back, {user.data.firstName.split(' ')[1]}
                 </h2>
                 <p className="text-sm text-gray-500">Your real estate business at a glance</p>
               </div>
@@ -451,6 +453,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <button className="bg-[#1A1A1A] hover:bg-black text-white px-4 py-2 rounded-lg flex items-center space-x-2 text-sm font-medium transition-colors shadow-sm">
                 <Plus size={16} />
                 <span className="hidden sm:inline">Add New</span>
+              </button>
+              
+              {/* Logout button */}
+              <button 
+                onClick={() => user && logout()}
+                className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors"
+                title="Logout"
+              >
+                <Icons.LogOut size={18} />
               </button>
             </div>
           </div>

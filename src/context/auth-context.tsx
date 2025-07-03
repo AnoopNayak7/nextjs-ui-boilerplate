@@ -1,73 +1,72 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuthStore } from '@/store/auth-store'
+import { User } from '@/types/user'
+import { getCookie } from 'cookies-next'
+import { authApi } from '@/lib/api'
 
-interface User {
-  id: string
-  name: string
-  email: string
-  role: 'admin' | 'agent'
-}
-
-interface AuthContextType {
-  user: User | null
+type AuthContextType = {
+  user: any
   login: (email: string, password: string) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
   isLoading: boolean
+  error: string | null
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter()
+  const { 
+    user, 
+    isLoading, 
+    error,
+    login: storeLogin, 
+    logout: storeLogout, 
+    setUser,
+    setError
+  } = useAuthStore()
 
   useEffect(() => {
-    // Check if user is logged in
-    const checkAuth = async () => {
+    // Check if token exists in cookies
+    const token = getCookie('auth_token') as string | undefined
+    
+    if (!token) {
+      useAuthStore.setState({ isLoading: false })
+      return
+    }
+
+    // Fetch current user data
+    const fetchCurrentUser = async () => {
       try {
-        // TODO: Implement actual authentication check
-        const savedUser = localStorage.getItem('user')
-        if (savedUser) {
-          setUser(JSON.parse(savedUser))
-        }
+        const userData = await authApi.getCurrentUser()
+        setUser(userData)
       } catch (error) {
-        console.error('Auth check failed:', error)
+        console.error('Failed to fetch user data:', error)
+        // If API call fails, clear token
+        storeLogout()
       } finally {
-        setIsLoading(false)
+        useAuthStore.setState({ isLoading: false })
       }
     }
 
-    checkAuth()
-  }, [])
+    fetchCurrentUser()
+  }, [setUser, storeLogout]) // Add dependencies
 
   const login = async (email: string, password: string) => {
-    try {
-      setIsLoading(true)
-      // TODO: Implement actual login logic
-      const mockUser: User = {
-        id: '1',
-        name: 'Admin User',
-        email: email,
-        role: 'admin',
-      }
-      localStorage.setItem('user', JSON.stringify(mockUser))
-      setUser(mockUser)
-    } catch (error) {
-      console.error('Login failed:', error)
-      throw error
-    } finally {
-      setIsLoading(false)
-    }
+    setError(null)
+    return storeLogin(email, password)
   }
 
-  const logout = () => {
-    localStorage.removeItem('user')
-    setUser(null)
+  const logout = async () => {
+    await storeLogout()
+    router.push('/login')
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading, error }}>
       {children}
     </AuthContext.Provider>
   )
