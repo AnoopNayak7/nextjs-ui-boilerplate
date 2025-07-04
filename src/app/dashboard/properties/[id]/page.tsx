@@ -9,20 +9,20 @@ import PropertyEditModal from '@/components/modals/PropertyEditModal'
 import ImageUploadModal from '@/components/modals/ImageUploadModal'
 import AmenitiesModal from '@/components/modals/AmenitiesModal'
 import { formatPrice } from '@/lib/utils'
+import { propertiesApi } from '@/lib/api'
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [propertyData, setPropertyData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  
+
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/v1/properties/${params.id}`)
-        const result = await response.json()
-        
+        const result = await propertiesApi.getById(params.id)
+
         if (result.success) {
           setPropertyData(result.data)
         } else {
@@ -35,25 +35,29 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         setLoading(false)
       }
     }
-    
+
     fetchProperty()
   }, [params.id])
-  
+
+  console.log('Property', propertyData)
+
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this property?')) {
       try {
-        const response = await fetch(`/api/v1/properties/${params.id}`, {
-          method: 'DELETE',
-        })
-        const result = await response.json()
-        
+        const result = await propertiesApi.delete(params.id)
+
         if (result.success) {
           router.push('/dashboard/properties')
         } else {
           alert('Failed to delete property: ' + result.error?.message)
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting property:', error)
+        if (error.response && error.response.status === 401) {
+          alert('You are not authorized to delete this property. Please log in again.');
+          router.push('/login');
+          return;
+        }
         alert('An error occurred while deleting the property')
       }
     }
@@ -76,7 +80,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   const [showAmenitiesModal, setShowAmenitiesModal] = useState(false)
 
   // Sample property data to use as fallback
-  const samplePropertyData:any = {
+  const samplePropertyData: any = {
     id: '1',
     title: 'Luxury Villa with Swimming Pool',
     type: 'Villa',
@@ -148,7 +152,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     setShowImageUploadModal(false)
   }
 
-  const handleImageDelete = (id:any) => {
+  const handleImageDelete = (id: any) => {
     setImages(images.filter(img => img.id !== id))
   }
 
@@ -157,12 +161,12 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     console.log('Document upload triggered')
   }
 
-  const handleDocumentVerify = (docKey:any) => {
+  const handleDocumentVerify = (docKey: any) => {
     // Simulate document verification
     console.log('Verifying document:', docKey)
   }
 
-  const DocumentCard = ({ docKey, name, status }:any) => (
+  const DocumentCard = ({ docKey, name, status }: any) => (
     <div className="flex items-center justify-between p-2 border rounded-lg bg-white hover:shadow-sm transition-shadow">
       <div className="flex items-center space-x-2">
         <FileText className="text-gray-400" size={16} />
@@ -178,7 +182,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <span className="text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full text-xs font-medium flex items-center">
               <Clock size={10} className="mr-1" /> Pending
             </span>
-            <button 
+            <button
               onClick={() => handleDocumentVerify(docKey)}
               className="text-blue-600 hover:text-blue-800 text-xs"
             >
@@ -186,7 +190,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             </button>
           </div>
         )}
-        <button 
+        <button
           onClick={() => setShowDocumentViewer(docKey)}
           className="p-1 hover:bg-gray-100 rounded-full"
         >
@@ -196,7 +200,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     </div>
   )
 
-  const DistanceCard = ({ icon: Icon, label, distance }:any) => (
+  const DistanceCard = ({ icon: Icon, label, distance }: any) => (
     <div className="flex items-center space-x-2 p-2 border rounded-lg bg-white">
       <div className="p-1.5 bg-red-50 rounded-lg">
         <Icon size={14} className="text-red-600" />
@@ -226,7 +230,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       <div className="p-6 bg-white rounded-xl shadow-sm">
         <div className="text-center py-12">
           <div className="text-red-500 text-lg mb-2">{error}</div>
-          <button 
+          <button
             onClick={() => router.push('/dashboard/properties')}
             className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
           >
@@ -239,28 +243,28 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
   // Use API data if available, otherwise fall back to sample data
   const property = propertyData || samplePropertyData
-  
+
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Header with back button and actions */}
       <div className="flex items-center justify-between mb-4">
-        <button 
+        <button
           onClick={() => router.push('/dashboard/properties')}
           className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft size={16} className="mr-2" />
           Back to Properties
         </button>
-        
+
         <div className="flex space-x-2">
-          <button 
+          <button
             onClick={() => router.push(`/dashboard/properties/${params.id}/edit`)}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
           >
             <Edit size={16} className="mr-2" />
             Edit
           </button>
-          <button 
+          <button
             onClick={handleDelete}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center"
           >
@@ -277,7 +281,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         </div>
         <div className="flex items-center space-x-3">
           <span className="text-xl font-bold text-gray-900">₹{(property.price / 10000000).toFixed(2)} Cr</span>
-          <button 
+          <button
             onClick={() => router.push(`/dashboard/properties/${params.id}/edit`)}
             className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2 text-sm"
           >
@@ -292,7 +296,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-semibold text-gray-900">Property Images</h2>
-            <button 
+            <button
               onClick={() => setShowImageUploadModal(true)}
               className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-1 text-sm"
             >
@@ -303,13 +307,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {images.map((image) => (
               <div key={image.id} className="relative group">
-                <img 
-                  src={image.url} 
+                <img
+                  src={image.url}
                   alt={image.name}
                   className="w-full h-32 object-cover rounded-lg"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity rounded-lg flex items-center justify-center">
-                  <button 
+                  <button
                     onClick={() => handleImageDelete(image.id)}
                     className="text-white opacity-0 group-hover:opacity-100 transition-opacity p-1 bg-red-500 rounded-full hover:bg-red-600"
                   >
@@ -404,7 +408,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-semibold text-gray-900">Description</h2>
-                <button 
+                <button
                   onClick={() => setEditingDescription(!editingDescription)}
                   className="text-red-600 hover:text-red-800 text-xs font-medium flex items-center space-x-1"
                 >
@@ -434,13 +438,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <div>
                   <h3 className="text-xs font-medium text-gray-700 mb-2">In Building</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {property.amenities.inBuilding.map((amenity:any) => (
+                    {property?.amenities?.inBuilding?.map((amenity: any) => (
                       <div key={amenity} className="flex items-center space-x-1 text-xs text-gray-600">
                         <Check size={12} className="text-green-500" />
                         <span>{amenity}</span>
                       </div>
                     ))}
-                    <button 
+                    <button
                       onClick={() => setShowAmenitiesModal(true)}
                       className="flex items-center space-x-1 text-xs text-red-600 hover:text-red-800"
                     >
@@ -452,13 +456,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <div>
                   <h3 className="text-xs font-medium text-gray-700 mb-2">Society/Area</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {property.amenities.society.map((amenity:any) => (
+                    {property?.amenities?.society?.map((amenity: any) => (
                       <div key={amenity} className="flex items-center space-x-1 text-xs text-gray-600">
                         <Check size={12} className="text-green-500" />
                         <span>{amenity}</span>
                       </div>
                     ))}
-                    <button 
+                    <button
                       onClick={() => setShowAmenitiesModal(true)}
                       className="flex items-center space-x-1 text-xs text-red-600 hover:text-red-800"
                     >
@@ -476,7 +480,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-semibold text-gray-900">Legal Documents</h2>
-                <button 
+                <button
                   onClick={() => setShowLegalDocumentModal(true)}
                   className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-1 text-xs"
                 >
@@ -484,11 +488,11 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                   <span>Upload Document</span>
                 </button>
               </div>
-              <div className="grid gap-2">
-                {Object.entries(property.documents).map(([key, doc]:any) => (
+              {/* <div className="grid gap-2">
+                {Object?.entries(property?.documents)?.map(([key, doc]:any) => (
                   <DocumentCard key={key} docKey={key} {...doc} />
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -497,7 +501,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="p-4">
               <h2 className="text-base font-semibold text-gray-900 mb-3">Floor Plans</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {property.floorPlans.map((plan:any) => (
+                {property?.floorPlans?.map((plan: any) => (
                   <div key={plan.name} className="border rounded-lg p-3 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <FileText className="text-gray-400" size={16} />
@@ -508,7 +512,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </button>
                   </div>
                 ))}
-                <button 
+                <button
                   onClick={() => setShowFloorPlanModal(true)}
                   className="border-2 border-dashed rounded-lg p-3 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors"
                 >
@@ -524,11 +528,18 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="p-4">
               <h2 className="text-base font-semibold text-gray-900 mb-3">Nearby Places</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <DistanceCard icon={GraduationCap} label="Schools" distance={property.distances.schools} />
-                <DistanceCard icon={Activity} label="Hospitals" distance={property.distances.hospitals} />
-                <DistanceCard icon={ShoppingCart} label="Supermarkets" distance={property.distances.supermarkets} />
-                <DistanceCard icon={Train} label="Metro Station" distance={property.distances.metro} />
-                <DistanceCard icon={Briefcase} label="Tech Park" distance={property.distances.techPark} />
+                {
+                  property.nearbyPlaces.length > 0 && (
+                    <>
+                      <DistanceCard icon={GraduationCap} label="Schools" distance={property.nearbyPlaces.schools} />
+                      <DistanceCard icon={Activity} label="Hospitals" distance={property.nearbyPlaces.hospitals} />
+                      <DistanceCard icon={ShoppingCart} label="Supermarkets" distance={property.nearbyPlaces.supermarkets} />
+                      <DistanceCard icon={Train} label="Metro Station" distance={property.nearbyPlaces.metro} />
+                      <DistanceCard icon={Briefcase} label="Tech Park" distance={property.nearbyPlaces.techPark} />
+                    </>
+                  )
+                }
+
               </div>
             </div>
           </div>
@@ -625,7 +636,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                   </button>
                   {showBankDropdown && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
-                      {banks.map((bank) => (
+                      {banks?.map((bank) => (
                         <label
                           key={bank}
                           className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-50 cursor-pointer"
@@ -743,7 +754,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="text-lg font-semibold">Document Viewer</h3>
-              <button 
+              <button
                 onClick={() => setShowDocumentViewer(null)}
                 className="text-gray-500 hover:text-gray-700"
               >

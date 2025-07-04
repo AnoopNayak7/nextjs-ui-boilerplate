@@ -7,6 +7,7 @@ interface PricingFormProps {
   onSubmit: (data: PricingDetails) => void
   initialData?: PricingDetails
   isSaving?: boolean
+  propertyType?: 'sell' | 'rent'
 }
 
 interface PricingDetails {
@@ -18,6 +19,9 @@ interface PricingDetails {
   otherCharges: number
   paymentPlan: 'full' | 'construction-linked' | 'custom'
   customPaymentPlan?: PaymentMilestone[]
+  securityDeposit?: number
+  advanceRent?: number
+  rentPeriod?: 'monthly' | 'quarterly' | 'yearly'
 }
 
 interface PaymentMilestone {
@@ -33,12 +37,25 @@ const DEFAULT_PRICING: PricingDetails = {
   maintenanceCharges: 0,
   maintenancePeriod: 'monthly',
   otherCharges: 0,
-  paymentPlan: 'full'
+  paymentPlan: 'full',
+  securityDeposit: 0,
+  advanceRent: 0,
+  rentPeriod: 'monthly'
 }
 
-export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, isSaving = false }: PricingFormProps) {
-  const [pricing, setPricing] = useState<PricingDetails>(initialData)
-  const [milestones, setMilestones] = useState<PaymentMilestone[]>(initialData.customPaymentPlan || [])
+export default function PricingForm({ 
+  onSubmit, 
+  initialData = DEFAULT_PRICING, 
+  isSaving = false, 
+  propertyType = 'sell' 
+}: any) {
+  const safeInitialData = initialData ? {
+    ...DEFAULT_PRICING,
+    ...initialData
+  } : DEFAULT_PRICING
+
+  const [pricing, setPricing] = useState<PricingDetails>(safeInitialData)
+  const [milestones, setMilestones] = useState<PaymentMilestone[]>(safeInitialData.customPaymentPlan || [])
   const [newMilestone, setNewMilestone] = useState({ milestone: '', percentage: 0 })
   const [error, setError] = useState<string | null>(null)
 
@@ -90,21 +107,35 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, i
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const finalData = {
+    let finalData = {
       ...pricing,
       customPaymentPlan: pricing.paymentPlan === 'custom' ? milestones : undefined
     }
+
+    // For rental properties, ensure we're not sending unnecessary fields
+    if (propertyType === 'rent') {
+      // Set payment plan to 'full' for rental properties
+      finalData.paymentPlan = 'full';
+      finalData.customPaymentPlan = undefined;
+      // Make sure rental-specific fields are included
+      finalData = {
+        ...finalData,
+        securityDeposit: pricing.securityDeposit || 0,
+        advanceRent: pricing.advanceRent || 0,
+        rentPeriod: pricing.rentPeriod || 'monthly'
+      };
+    }
+
     onSubmit(finalData)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Basic Price Details */}
         <div className="space-y-4">
           <div>
             <label htmlFor="total-price" className="block text-sm font-medium text-gray-700 mb-1">
-              Total Price
+              {propertyType === 'rent' ? 'Monthly Rent' : 'Total Price'}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -141,27 +172,67 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, i
             </div>
           </div>
 
-          <div>
-            <label htmlFor="booking-amount" className="block text-sm font-medium text-gray-700 mb-1">
-              Booking Amount
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IndianRupee size={16} className="text-gray-400" />
+          {propertyType === 'rent' ? (
+            <>
+              <div>
+                <label htmlFor="security-deposit" className="block text-sm font-medium text-gray-700 mb-1">
+                  Security Deposit
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IndianRupee size={16} className="text-gray-400" />
+                  </div>
+                  <input
+                    id="security-deposit"
+                    type="number"
+                    value={pricing.securityDeposit}
+                    onChange={(e) => handlePricingChange('securityDeposit', Number(e.target.value))}
+                    min="0"
+                    className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                </div>
               </div>
-              <input
-                id="booking-amount"
-                type="number"
-                value={pricing.bookingAmount}
-                onChange={(e) => handlePricingChange('bookingAmount', Number(e.target.value))}
-                min="0"
-                className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              />
+              <div>
+                <label htmlFor="advance-rent" className="block text-sm font-medium text-gray-700 mb-1">
+                  Advance Rent
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <IndianRupee size={16} className="text-gray-400" />
+                  </div>
+                  <input
+                    id="advance-rent"
+                    type="number"
+                    value={pricing.advanceRent}
+                    onChange={(e) => handlePricingChange('advanceRent', Number(e.target.value))}
+                    min="0"
+                    className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            <div>
+              <label htmlFor="booking-amount" className="block text-sm font-medium text-gray-700 mb-1">
+                Booking Amount
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <IndianRupee size={16} className="text-gray-400" />
+                </div>
+                <input
+                  id="booking-amount"
+                  type="number"
+                  value={pricing.bookingAmount}
+                  onChange={(e) => handlePricingChange('bookingAmount', Number(e.target.value))}
+                  min="0"
+                  className="pl-9 w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Additional Charges */}
         <div className="space-y-4">
           <div>
             <label htmlFor="maintenance" className="block text-sm font-medium text-gray-700 mb-1">
@@ -193,6 +264,24 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, i
             </div>
           </div>
 
+          {propertyType === 'rent' && (
+            <div>
+              <label htmlFor="rent-period" className="block text-sm font-medium text-gray-700 mb-1">
+                Rent Period
+              </label>
+              <select
+                id="rent-period"
+                value={pricing.rentPeriod}
+                onChange={(e) => handlePricingChange('rentPeriod', e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
+              >
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          )}
+
           <div>
             <label htmlFor="other-charges" className="block text-sm font-medium text-gray-700 mb-1">
               Other Charges
@@ -214,129 +303,129 @@ export default function PricingForm({ onSubmit, initialData = DEFAULT_PRICING, i
         </div>
       </div>
 
-      {/* Payment Plan */}
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Payment Plan
-          </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <div>
-                <div className="text-sm font-medium text-gray-700">Full Payment</div>
-                <div className="text-xs text-gray-500 mt-1">100% payment upfront</div>
-              </div>
-              <input
-                type="radio"
-                name="payment-plan"
-                value="full"
-                checked={pricing.paymentPlan === 'full'}
-                onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
-              />
+      {propertyType === 'sell' && (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Payment Plan
             </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <div>
+                  <div className="text-sm font-medium text-gray-700">Full Payment</div>
+                  <div className="text-xs text-gray-500 mt-1">100% payment upfront</div>
+                </div>
+                <input
+                  type="radio"
+                  name="payment-plan"
+                  value="full"
+                  checked={pricing.paymentPlan === 'full'}
+                  onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
+                  className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
+                />
+              </label>
 
-            <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <div>
-                <div className="text-sm font-medium text-gray-700">Construction Linked</div>
-                <div className="text-xs text-gray-500 mt-1">Pay as per construction stages</div>
-              </div>
-              <input
-                type="radio"
-                name="payment-plan"
-                value="construction-linked"
-                checked={pricing.paymentPlan === 'construction-linked'}
-                onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
-              />
-            </label>
+              <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <div>
+                  <div className="text-sm font-medium text-gray-700">Construction Linked</div>
+                  <div className="text-xs text-gray-500 mt-1">Pay as per construction stages</div>
+                </div>
+                <input
+                  type="radio"
+                  name="payment-plan"
+                  value="construction-linked"
+                  checked={pricing.paymentPlan === 'construction-linked'}
+                  onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
+                  className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
+                />
+              </label>
 
-            <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <div>
-                <div className="text-sm font-medium text-gray-700">Custom Plan</div>
-                <div className="text-xs text-gray-500 mt-1">Define custom milestones</div>
-              </div>
-              <input
-                type="radio"
-                name="payment-plan"
-                value="custom"
-                checked={pricing.paymentPlan === 'custom'}
-                onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
-                className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
-              />
-            </label>
+              <label className="relative flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <div>
+                  <div className="text-sm font-medium text-gray-700">Custom Plan</div>
+                  <div className="text-xs text-gray-500 mt-1">Define custom milestones</div>
+                </div>
+                <input
+                  type="radio"
+                  name="payment-plan"
+                  value="custom"
+                  checked={pricing.paymentPlan === 'custom'}
+                  onChange={(e) => handlePricingChange('paymentPlan', e.target.value)}
+                  className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
+                />
+              </label>
+            </div>
           </div>
         </div>
+      )}
 
-        {/* Custom Payment Plan */}
-        {pricing.paymentPlan === 'custom' && (
-          <div className="space-y-4 mt-6">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-medium text-gray-700">Payment Milestones</h4>
-              <div className="flex items-center text-xs text-gray-500">
-                <Info size={14} className="mr-1" />
-                Total: {milestones.reduce((sum, m) => sum + m.percentage, 0)}%
-              </div>
+      {pricing.paymentPlan === 'custom' && (
+        <div className="space-y-4 mt-6">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-medium text-gray-700">Payment Milestones</h4>
+            <div className="flex items-center text-xs text-gray-500">
+              <Info size={14} className="mr-1" />
+              Total: {milestones.reduce((sum, m) => sum + m.percentage, 0)}%
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={newMilestone.milestone}
-                onChange={(e) => setNewMilestone(prev => ({ ...prev, milestone: e.target.value }))}
-                placeholder="Milestone description"
-                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              />
-              <div className="flex space-x-2">
-                <input
-                  type="number"
-                  value={newMilestone.percentage}
-                  onChange={(e) => setNewMilestone(prev => ({ ...prev, percentage: Number(e.target.value) }))}
-                  min="1"
-                  max="100"
-                  placeholder="Percentage"
-                  className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddMilestone}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <p className="text-sm text-red-500">{error}</p>
-            )}
-
-            {milestones.length > 0 && (
-              <div className="space-y-2">
-                {milestones.map((milestone, index) => (
-                  <div
-                    key={milestone.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-700">{index + 1}.</span>
-                      <span className="text-sm text-gray-700">{milestone.milestone}</span>
-                      <span className="text-sm font-medium text-red-600">{milestone.percentage}%</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveMilestone(milestone.id)}
-                      className="text-gray-400 hover:text-red-500"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-        )}
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              value={newMilestone.milestone}
+              onChange={(e) => setNewMilestone(prev => ({ ...prev, milestone: e.target.value }))}
+              placeholder="Milestone description"
+              className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            />
+            <div className="flex space-x-2">
+              <input
+                type="number"
+                value={newMilestone.percentage}
+                onChange={(e) => setNewMilestone(prev => ({ ...prev, percentage: Number(e.target.value) }))}
+                min="1"
+                max="100"
+                placeholder="Percentage"
+                className="flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              />
+              <button
+                type="button"
+                onClick={handleAddMilestone}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
+
+          {milestones.length > 0 && (
+            <div className="space-y-2">
+              {milestones.map((milestone, index) => (
+                <div
+                  key={milestone.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-gray-700">{index + 1}.</span>
+                    <span className="text-sm text-gray-700">{milestone.milestone}</span>
+                    <span className="text-sm font-medium text-red-600">{milestone.percentage}%</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveMilestone(milestone.id)}
+                    className="text-gray-400 hover:text-red-500"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex justify-end">
         <button

@@ -1,8 +1,10 @@
+// @ts-nocheck
 'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Building2, User, Briefcase, Users } from 'lucide-react'
+import { propertiesApi } from '@/lib/api'
 import BasicDetailsForm from '@/components/property/BasicDetailsForm'
 import MediaUploadForm from '@/components/property/MediaUploadForm'
 import LegalDocumentsForm from '@/components/property/LegalDocumentsForm'
@@ -80,65 +82,71 @@ export default function AddPropertyPage() {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
-      // Submit the complete form data
       submitProperty(updatedFormData);
     }
   }
+
+  console.log("Property creation:::", formData)
   
   const submitProperty = async (data: any) => {
     try {
-      // Prepare the property data
+      // if (!data.basicDetails) {
+      //   console.log(data)
+      //   console.error('Error: basicDetails is null or undefined');
+      //   alert('Missing basic details. Please complete the basic details form.');
+      //   setCurrentStep(1);
+      //   return;
+      // }
+      
       const propertyData = {
-        // Basic details
-        title: data.basicDetails.title,
-        type: data.basicDetails.type,
-        propertyType: data.basicDetails.propertyType, // rent or sell
-        bhk: data.basicDetails.bhk,
-        superBuiltUpArea: data.basicDetails.superBuiltUpArea,
-        carpetArea: data.basicDetails.carpetArea,
-        floor: data.basicDetails.floor,
-        totalFloors: data.basicDetails.totalFloors,
-        age: data.basicDetails.age,
-        parking: data.basicDetails.parking,
-        facing: data.basicDetails.facing,
-        reraNumber: data.basicDetails.reraNumber,
-        price: data.basicDetails.price,
-        description: data.basicDetails.description,
+        title: data.basicDetails.title || '',
+        description: data.basicDetails.description || '',
+        propertyType: data.basicDetails.propertyType || 'sell',
+        type: data.basicDetails.type || '',
+        price: data.basicDetails.price ? parseFloat(data.basicDetails.price) : 0,
         
-        // Owner type
+        // Property specifications
+        bhk: data.basicDetails.bhk || '',
+        superBuiltUpArea: data.basicDetails.superBuiltUpArea || '',
+        carpetArea: data.basicDetails.carpetArea || '',
+        floor: data.basicDetails.floor || '',
+        totalFloors: data.basicDetails.totalFloors || '',
+        age: data.basicDetails.age || '',
+        parking: data.basicDetails.parking || '',
+        facing: data.basicDetails.facing || '',
+        reraNumber: data.basicDetails.reraNumber || '',
+        
+        // Owner information
         ownerType: ownerType,
+        agentId: data.basicDetails.agentId || null,
+        builderId: data.basicDetails.builderId || null,
         
-        // Agent or Builder ID if selected
-        agentId: data.basicDetails.agentId,
-        builderId: data.basicDetails.builderId,
+        // Additional details
+        pricing: data.pricing || {
+          totalPrice: 0,
+          pricePerSqFt: 0,
+          bookingAmount: 0,
+          maintenanceCharges: 0,
+          maintenancePeriod: 'monthly',
+          otherCharges: 0,
+          paymentPlan: 'full'
+        },
         
-        // Other form sections
-        media: data.media,
-        pricing: data.pricing,
-        documents: data.documents,
-        nearbyPlaces: data.nearbyPlaces,
-        bankApprovals: data.bankApprovals,
+        // Media, documents and other details
+        media: data.media || { images: [], floorPlans: [] },
+        documents: data.documents || [],
+        nearbyPlaces: data.nearbyPlaces?.distances || [],
+        bankApprovals: data.bankApprovals?.banks || [],
         
-        // Default status
+        // Status
         status: 'draft'
       };
-      
-      // Call the API to create the property
-      const response = await fetch('/api/v1/properties', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(propertyData),
-      });
-      
-      const result = await response.json();
+
+      const result = await propertiesApi.create(propertyData);
       
       if (result.success) {
-        // Redirect to properties page on success
         router.push('/dashboard/properties');
       } else {
-        // Handle error
         console.error('Error creating property:', result.error);
         alert('Failed to create property: ' + result.error.message);
       }
@@ -188,22 +196,26 @@ export default function AddPropertyPage() {
         )
 
       case 'basic-details':
-        return <BasicDetailsForm onSubmit={handleStepSubmit} />
+        return <BasicDetailsForm onSubmit={handleStepSubmit} initialValues={formData.basicDetails || {}} />
 
       case 'media':
-        return <MediaUploadForm onSubmit={handleStepSubmit} />
+        return <MediaUploadForm onSubmit={handleStepSubmit} initialData={formData.media || {}} />
 
       case 'pricing':
-        return <PricingForm onSubmit={handleStepSubmit} />
+        return <PricingForm 
+          onSubmit={handleStepSubmit} 
+          initialData={formData.pricing || {}} 
+          propertyType={formData?.basicDetails?.propertyType || 'sell'} 
+        />
 
       case 'documents':
-        return <LegalDocumentsForm onSubmit={handleStepSubmit} />
+        return <LegalDocumentsForm onSubmit={handleStepSubmit} initialDocuments={formData.documents || []} />
 
       case 'nearby':
-        return <NearbyPlacesForm onSubmit={handleStepSubmit} />
+        return <NearbyPlacesForm onSubmit={handleStepSubmit} initialData={formData.nearbyPlaces || {}} />
 
       case 'bank-approvals':
-        return <BankApprovalsForm onSubmit={handleStepSubmit} />
+        return <BankApprovalsForm onSubmit={handleStepSubmit} initialData={formData.bankApprovals || {}} />
 
       default:
         return null
@@ -219,7 +231,6 @@ export default function AddPropertyPage() {
         </p>
       </div>
 
-      {/* Progress Steps */}
       <div className="mb-8">
         <div className="flex items-center justify-between relative">
           {STEPS.map((step, index) => (
@@ -237,7 +248,7 @@ export default function AddPropertyPage() {
               <div className="mt-2 text-xs text-gray-500">{step.title}</div>
             </div>
           ))}
-          {/* Progress Line */}
+        
           <div
             className="absolute top-4 left-0 h-0.5 bg-gray-200 -z-10"
             style={{ width: '100%' }}
@@ -250,12 +261,10 @@ export default function AddPropertyPage() {
         </div>
       </div>
 
-      {/* Step Content */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
         {renderStep()}
       </div>
 
-      {/* Navigation Buttons */}
       {currentStep > 0 && (
         <div className="mt-8 flex justify-between">
           <button

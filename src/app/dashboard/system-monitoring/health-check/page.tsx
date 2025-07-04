@@ -3,7 +3,7 @@
 import { HeartPulse, Server, HardDrive, Activity, AlertCircle, Loader2 } from 'lucide-react'
 
 import { useState, useEffect } from 'react'
-import axios from '@/lib/axios'
+import { systemApi } from '@/lib/api'
 
 interface HealthCheck {
   name: string
@@ -52,8 +52,7 @@ export default function HealthCheckPage() {
   const fetchHealthStatus = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get('/health')
-      const healthData = response.data
+      const healthData = await systemApi.getHealth()
 
       setHealthChecks([
         {

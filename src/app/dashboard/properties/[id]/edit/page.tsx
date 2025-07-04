@@ -9,6 +9,7 @@ import PricingForm from '@/components/property/PricingForm'
 import NearbyPlacesForm from '@/components/property/NearbyPlacesForm'
 import BankApprovalsForm from '@/components/property/BankApprovalsForm'
 import DocumentsForm from '@/components/property/DocumentsForm'
+import { propertiesApi } from '@/lib/api'
 
 export default function EditPropertyPage({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -31,8 +32,7 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
     const fetchProperty = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/v1/properties/${params.id}`)
-        const result = await response.json()
+        const result = await propertiesApi.getById(params.id)
         
         if (result.success) {
           setProperty(result.data)
@@ -122,26 +122,18 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
       setSaving(true)
       setSaveError('')
 
-      // Prepare property data from all form sections
+      // Prepare property data from all form sections with null checks
       const propertyData = {
-        ...formData.basicDetails,
-        images: formData.media.images,
-        ...formData.pricing,
-        documents: formData.documents.documents,
-        distances: formData.nearbyPlaces.distances,
-        banks: formData.bankApprovals.banks
+        ...(formData.basicDetails || {}),
+        images: formData.media?.images || [],
+        ...(formData.pricing || {}),
+        documents: formData.documents?.documents || [],
+        distances: formData.nearbyPlaces?.distances || [],
+        banks: formData.bankApprovals?.banks || []
       }
 
       // Send PUT request to update property
-      const response = await fetch(`/api/v1/properties/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(propertyData)
-      })
-
-      const result = await response.json()
+      const result = await propertiesApi.update(params.id, propertyData)
 
       if (result.success) {
         // Redirect to property details page on success
@@ -178,7 +170,7 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
       case 3:
         return (
           <PricingForm 
-            onSubmit={(data) => handleStepSubmit(data, 3)} 
+            onSubmit={(data:any) => handleStepSubmit(data, 3)} 
             initialData={formData.pricing}
             isSaving={saving}
           />
@@ -186,7 +178,7 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
       case 4:
         return (
           <DocumentsForm 
-            onSubmit={(data) => handleStepSubmit(data, 4)} 
+            onSubmit={(data:any) => handleStepSubmit(data, 4)} 
             initialData={formData.documents}
             isSaving={saving}
           />

@@ -29,10 +29,13 @@ interface MediaUploadFormProps {
 }
 
 export default function MediaUploadForm({ onSubmit, initialImages = [], initialFloorPlans = [], initialData = {}, isSaving = false }: MediaUploadFormProps) {
+  // Ensure initialData is properly initialized
+  const safeInitialData = initialData || {}
+  
   // Use initialData.images if provided, otherwise fall back to initialImages
-  const startingImages = initialData?.images || initialImages
+  const startingImages = safeInitialData.images || initialImages || []
   const [images, setImages] = useState<PropertyImage[]>(startingImages)
-  const [floorPlans, setFloorPlans] = useState<FloorPlan[]>(initialFloorPlans)
+  const [floorPlans, setFloorPlans] = useState<FloorPlan[]>(initialFloorPlans || [])
   const [dragActive, setDragActive] = useState(false)
   const [activeTab, setActiveTab] = useState<'images' | 'floorPlans'>('images')
   const [error, setError] = useState<string | null>(null)

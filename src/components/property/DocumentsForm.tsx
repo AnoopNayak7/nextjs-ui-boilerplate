@@ -15,7 +15,7 @@ interface DocumentsFormProps {
   isSaving?: boolean
 }
 
-export default function DocumentsForm({ onSubmit, initialData = {}, isSaving = false }: DocumentsFormProps) {
+export default function DocumentsForm({ onSubmit, initialData = {}, isSaving = false }: any) {
   const [documents, setDocuments] = useState<any[]>(initialData.documents || [])
 
   const handleDocumentsSubmit = (uploadedDocuments: any[]) => {

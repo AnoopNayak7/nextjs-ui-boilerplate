@@ -16,44 +16,61 @@ interface AuthState {
   setError: (error: string | null) => void;
 }
 
-// Token expiration time (24 hours in seconds)
 const TOKEN_EXPIRATION = 24 * 60 * 60;
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      isLoading: true, // Set to true initially to prevent redirect flashes
+      isLoading: true,
       error: null,
       token: null,
-      
+
       setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
-      setError: (error) => set({ error }),
       
+      setToken: (token) => {
+        set({ token });
+        if (token) {
+          setCookie('auth_token', token, { 
+            maxAge: TOKEN_EXPIRATION,
+            path: '/',
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production'
+          });
+        } else {
+          deleteCookie('auth_token');
+        }
+      },
+      
+      setError: (error) => set({ error }),
+
       login: async (email, password) => {
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.login({ email, password, clientType: 'w' });
-          
+
           // Extract token from response
           const token = response.token || response.data?.token;
-          
+
           if (!token) {
             throw new Error('No token received from server');
           }
-          
-          // Set token in cookie with expiration
-          setCookie('auth_token', token, { maxAge: TOKEN_EXPIRATION });
-          
-          // Set token and user in store
-          set({ 
+
+          // Set token in both cookie and store (store will also sync to cookie via setToken)
+          setCookie('auth_token', token, { 
+            maxAge: TOKEN_EXPIRATION,
+            path: '/',
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production'
+          });
+
+          set({
             token,
             user: response.user || response.data?.user,
             isLoading: false,
             error: null
           });
-          
+
           return response;
         } catch (error: any) {
           const errorMessage = error?.response?.data?.message || error?.message || 'Login failed';
@@ -61,32 +78,34 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
-      
+
       logout: async () => {
         set({ isLoading: true });
         try {
-          // Call logout API if token exists
           const currentToken = get().token;
           if (currentToken) {
             await authApi.logout();
           }
-          
-          // Clear token from cookie
+
+          // Clear both cookie and localStorage
           deleteCookie('auth_token');
+          deleteCookie('auth_token', { path: '/' });
           
-          // Reset state
-          set({ 
-            user: null, 
+          set({
+            user: null,
             token: null,
             isLoading: false,
             error: null
           });
         } catch (error) {
           console.error('Logout error:', error);
-          // Still clear user data even if API call fails
+          
+          // Clear both cookie and localStorage even if logout API fails
           deleteCookie('auth_token');
-          set({ 
-            user: null, 
+          deleteCookie('auth_token', { path: '/' });
+          
+          set({
+            user: null,
             token: null,
             isLoading: false,
             error: null
@@ -96,9 +115,9 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        token: state.token 
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token
       }),
     }
   )

@@ -19,15 +19,15 @@ interface OwnerDetailsFormProps {
   isSaving?: boolean
 }
 
-export default function OwnerDetailsForm({ ownerType, onSubmit, initialValues = {}, isSaving = false }: OwnerDetailsFormProps) {
+export default function OwnerDetailsForm({ ownerType, onSubmit, initialValues = {}, isSaving = false }: any) {
   const [details, setDetails] = useState<OwnerDetails>({
-    name: initialValues.name || '',
-    email: initialValues.email || '',
-    phone: initialValues.phone || '',
-    address: initialValues.address || '',
-    reraId: initialValues.reraId || '',
-    companyName: initialValues.companyName || '',
-    designation: initialValues.designation || ''
+    name: initialValues?.name || '',
+    email: initialValues?.email || '',
+    phone: initialValues?.phone || '',
+    address: initialValues?.address || '',
+    reraId: initialValues?.reraId || '',
+    companyName: initialValues?.companyName || '',
+    designation: initialValues?.designation || ''
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof OwnerDetails, string>>>({})

@@ -33,9 +33,13 @@ const PLACE_CATEGORIES = [
 ] as const
 
 export default function NearbyPlacesForm({ onSubmit, initialPlaces = [], initialData = {}, isSaving = false }: NearbyPlacesFormProps) {
+  // Ensure initialData and its properties are properly initialized
+  const safeInitialData = initialData || {}
+  const safeInitialPlaces = initialPlaces || []
+  
   // Use initialData.distances if provided, otherwise fall back to initialPlaces
-  const startingPlaces = initialData?.distances || initialPlaces
-  const [places, setPlaces] = useState<NearbyPlace[]>(startingPlaces)
+  const startingPlaces = safeInitialData.distances || safeInitialPlaces
+  const [places, setPlaces] = useState<NearbyPlace[]>(startingPlaces || [])
   const [newPlace, setNewPlace] = useState<{
     name: string;
     category: typeof PLACE_CATEGORIES[number];

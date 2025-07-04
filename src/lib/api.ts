@@ -130,6 +130,15 @@ export const agentsApi = {
       throw error;
     }
   },
+
+  search: async (term: string) => {
+    try {
+      const response = await axiosInstance.get(`/agents?search=${term}`);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
 };
 
 // Builders API endpoints
@@ -151,6 +160,15 @@ export const buildersApi = {
       throw error;
     }
   },
+
+  search: async (term: string) => {
+    try {
+      const response = await axiosInstance.get(`/builders?search=${term}`);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
 };
 
 // Users API endpoints
@@ -167,6 +185,48 @@ export const usersApi = {
   getById: async (id: string) => {
     try {
       const response = await axiosInstance.get(`/users/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+};
+
+// Locations API endpoints
+export const locationsApi = {
+  getAll: async () => {
+    try {
+      const response = await axiosInstance.get('/locations');
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+  
+  addState: async (stateName: string) => {
+    try {
+      const response = await axiosInstance.post('/locations/states', { stateName });
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+  
+  addCity: async (stateName: string, cityData: any) => {
+    try {
+      const response = await axiosInstance.post(`/locations/states/${stateName}/cities`, cityData);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+};
+
+// System Monitoring API endpoints
+export const systemApi = {
+  getHealth: async () => {
+    try {
+      const response = await axiosInstance.get('/health');
       return response.data;
     } catch (error: any) {
       throw error;

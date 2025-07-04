@@ -18,7 +18,7 @@ interface AddToFeaturedModalProps {
   onAdd: (propertyId: number, featuredFrom: Date, featuredUntil: Date, isPaid: boolean) => void
 }
 
-export default function AddToFeaturedModal({ onClose, onAdd }: AddToFeaturedModalProps) {
+export default function AddToFeaturedModal({ onClose, onAdd }: any) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null])

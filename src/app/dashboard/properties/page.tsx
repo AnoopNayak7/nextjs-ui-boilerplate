@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { propertiesApi } from '@/lib/api'
 import {
   Search,
   Filter,
@@ -26,7 +27,7 @@ export default function PropertiesPage() {
   const [selectedFilters, setSelectedFilters] = useState({
     status: 'all',
     type: 'all',
-    propertyType: 'all', // rent or sell
+    propertyType: 'all',
     priceRange: [0, 100000000],
     location: 'all',
   })
@@ -37,16 +38,14 @@ export default function PropertiesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   
-  // Fetch properties from API
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/api/v1/properties')
-        const result = await response.json()
+        const result = await propertiesApi.getAll()
         
         if (result.success) {
-          setProperties(result.data.items || [])
+          setProperties(result.data.properties || [])
         } else {
           setError(result.error?.message || 'Failed to fetch properties')
         }
@@ -60,130 +59,8 @@ export default function PropertiesPage() {
     
     fetchProperties()
   }, [])
-  
-  // Fallback to sample data if API fails or for development
-  const sampleProperties = [
-    {
-      id: 1,
-      title: 'Luxury Villa with Swimming Pool',
-      type: 'Villa',
-      location: 'Whitefield, Bangalore',
-      price: 35000000,
-      status: 'active',
-      postedBy: 'Rajesh Kumar',
-      postedDate: '2024-01-15',
-      views: 1250,
-      bedrooms: 4,
-      bathrooms: 3,
-      area: '3,200 sqft',
-      image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop'
-    },
-    {
-      id: 2,
-      title: 'Modern 3BHK Apartment',
-      type: 'Apartment',
-      location: 'Koramangala, Bangalore',
-      price: 12500000,
-      status: 'active',
-      postedBy: 'Priya Sharma',
-      postedDate: '2024-01-20',
-      views: 890,
-      bedrooms: 3,
-      bathrooms: 2,
-      area: '1,800 sqft',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop'
-    },
-    {
-      id: 3,
-      title: 'Spacious 2BHK in Gated Community',
-      type: 'Apartment',
-      location: 'Electronic City, Bangalore',
-      price: 8500000,
-      status: 'inactive',
-      postedBy: 'Amit Gupta',
-      postedDate: '2024-01-18',
-      views: 567,
-      bedrooms: 2,
-      bathrooms: 2,
-      area: '1,200 sqft',
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop'
-    },
-    {
-      id: 4,
-      title: 'Premium Penthouse with City View',
-      type: 'Penthouse',
-      location: 'UB City Mall, Bangalore',
-      price: 85000000,
-      status: 'active',
-      postedBy: 'Sunita Reddy',
-      postedDate: '2024-01-22',
-      views: 2100,
-      bedrooms: 5,
-      bathrooms: 4,
-      area: '4,500 sqft',
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop'
-    },
-    {
-      id: 5,
-      title: 'Cozy Studio Apartment',
-      type: 'Studio',
-      location: 'Indiranagar, Bangalore',
-      price: 4500000,
-      status: 'active',
-      postedBy: 'Karthik Nair',
-      postedDate: '2024-01-25',
-      views: 345,
-      bedrooms: 1,
-      bathrooms: 1,
-      area: '600 sqft',
-      image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop'
-    },
-    {
-      id: 6,
-      title: 'Independent House with Garden',
-      type: 'House',
-      location: 'JP Nagar, Bangalore',
-      price: 18000000,
-      status: 'inactive',
-      postedBy: 'Deepa Krishnan',
-      postedDate: '2024-01-12',
-      views: 678,
-      bedrooms: 3,
-      bathrooms: 2,
-      area: '2,400 sqft',
-      image: 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=400&h=300&fit=crop'
-    },
-    {
-      id: 7,
-      title: 'Luxury Duplex Villa',
-      type: 'Villa',
-      location: 'Sarjapur Road, Bangalore',
-      price: 42000000,
-      status: 'active',
-      postedBy: 'Venkat Iyer',
-      postedDate: '2024-01-28',
-      views: 1567,
-      bedrooms: 4,
-      bathrooms: 4,
-      area: '3,800 sqft',
-      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&h=300&fit=crop'
-    },
-    {
-      id: 8,
-      title: 'Affordable 1BHK Flat',
-      type: 'Apartment',
-      location: 'Marathahalli, Bangalore',
-      price: 3200000,
-      status: 'active',
-      postedBy: 'Ravi Kumar',
-      postedDate: '2024-01-30',
-      views: 234,
-      bedrooms: 1,
-      bathrooms: 1,
-      area: '500 sqft',
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&h=300&fit=crop'
-    }
-  ]
+
+  console.log(properties)
 
   const formatPrice = (price:number) => {
     if (price >= 10000000) {
@@ -529,10 +406,7 @@ export default function PropertiesPage() {
                       onClick={async () => {
                         if (confirm('Are you sure you want to delete this property?')) {
                           try {
-                            const response = await fetch(`/api/v1/properties/${property.id}`, {
-                              method: 'DELETE',
-                            });
-                            const result = await response.json();
+                            const result = await propertiesApi.delete(property.id);
                             if (result.success) {
                               // Refresh the properties list
                               setProperties(properties.filter(p => p.id !== property.id));

@@ -34,9 +34,13 @@ const POPULAR_BANKS = [
 ] as const
 
 export default function BankApprovalsForm({ onSubmit, initialApprovals = [], initialData = {}, isSaving = false }: BankApprovalsFormProps) {
+  // Ensure initialData and its properties are properly initialized
+  const safeInitialData = initialData || {}
+  const safeInitialApprovals = initialApprovals || []
+  
   // Use initialData.banks if provided, otherwise fall back to initialApprovals
-  const startingApprovals = initialData?.banks || initialApprovals
-  const [approvals, setApprovals] = useState<BankApproval[]>(startingApprovals)
+  const startingApprovals = safeInitialData.banks || safeInitialApprovals
+  const [approvals, setApprovals] = useState<BankApproval[]>(startingApprovals || [])
   const [newApproval, setNewApproval] = useState<{
     bankName: string;
     status: BankApproval['status'];

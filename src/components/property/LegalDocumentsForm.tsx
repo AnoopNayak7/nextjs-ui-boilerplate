@@ -25,7 +25,9 @@ const DOCUMENT_CATEGORIES = [
 ] as const
 
 export default function LegalDocumentsForm({ onSubmit, initialDocuments = [], isSaving = false }: LegalDocumentsFormProps) {
-  const [documents, setDocuments] = useState<LegalDocument[]>(initialDocuments)
+  // Ensure initialDocuments is properly initialized
+  const safeInitialDocuments = initialDocuments || []
+  const [documents, setDocuments] = useState<LegalDocument[]>(safeInitialDocuments)
   const [selectedCategory, setSelectedCategory] = useState<typeof DOCUMENT_CATEGORIES[number]['id']>('rera')
   const [dragActive, setDragActive] = useState(false)
   const [error, setError] = useState<string | null>(null)

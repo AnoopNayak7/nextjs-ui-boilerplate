@@ -165,44 +165,44 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         },
       ]
     },
-    {
-      title: "Development & Deployment",
-      items: [
-        { 
-          id: 'code-management', 
-          icon: Code, 
-          label: 'Code Version', 
-          href: '/dashboard/development-deployment/code-version',
-          // children: [
-          //   { id: 'version-control', label: 'Version Control', href: '/dashboard/development/code/versions' },
-          //   // { id: 'code-quality', label: 'Code Quality', href: '/dashboard/development/code/quality' },
-          //   // { id: 'dependencies', label: 'Dependencies', href: '/dashboard/development/code/dependencies' },
-          // ]
-        },
-        { 
-          id: 'deployment', 
-          icon: Icons.Orbit, 
-          label: 'Deploy Status', 
-          href: '/dashboard/development-deployment/deploy-status',
-          // children: [
-          //   { id: 'deployment-history', label: 'Deployment History', href: '/dashboard/development/deploy/history' },
-          //   { id: 'rollback-status', label: 'Rollback Status', href: '/dashboard/development/deploy/rollback' },
-          //   { id: 'environment-status', label: 'Environment Status', href: '/dashboard/development/deploy/environments' },
-          // ]
-        },
-        { 
-          id: 'error-monitoring', 
-          icon: AlertTriangle, 
-          label: 'Error & Crash Reports', 
-          href: '/dashboard/development-deployment/error-crash',
-          // children: [
-          //   { id: 'error-logs', label: 'Error Logs', href: '/dashboard/monitoring/errors/logs' },
-          //   { id: 'crash-reports', label: 'Crash Reports', href: '/dashboard/monitoring/errors/crashes' },
-          //   { id: 'performance-issues', label: 'Performance Issues', href: '/dashboard/monitoring/errors/performance' },
-          // ]
-        },
-      ]
-    },
+    // {
+    //   title: "Development & Deployment",
+    //   items: [
+    //     { 
+    //       id: 'code-management', 
+    //       icon: Code, 
+    //       label: 'Code Version', 
+    //       href: '/dashboard/development-deployment/code-version',
+    //       // children: [
+    //       //   { id: 'version-control', label: 'Version Control', href: '/dashboard/development/code/versions' },
+    //       //   // { id: 'code-quality', label: 'Code Quality', href: '/dashboard/development/code/quality' },
+    //       //   // { id: 'dependencies', label: 'Dependencies', href: '/dashboard/development/code/dependencies' },
+    //       // ]
+    //     },
+    //     { 
+    //       id: 'deployment', 
+    //       icon: Icons.Orbit, 
+    //       label: 'Deploy Status', 
+    //       href: '/dashboard/development-deployment/deploy-status',
+    //       // children: [
+    //       //   { id: 'deployment-history', label: 'Deployment History', href: '/dashboard/development/deploy/history' },
+    //       //   { id: 'rollback-status', label: 'Rollback Status', href: '/dashboard/development/deploy/rollback' },
+    //       //   { id: 'environment-status', label: 'Environment Status', href: '/dashboard/development/deploy/environments' },
+    //       // ]
+    //     },
+    //     { 
+    //       id: 'error-monitoring', 
+    //       icon: AlertTriangle, 
+    //       label: 'Error & Crash Reports', 
+    //       href: '/dashboard/development-deployment/error-crash',
+    //       // children: [
+    //       //   { id: 'error-logs', label: 'Error Logs', href: '/dashboard/monitoring/errors/logs' },
+    //       //   { id: 'crash-reports', label: 'Crash Reports', href: '/dashboard/monitoring/errors/crashes' },
+    //       //   { id: 'performance-issues', label: 'Performance Issues', href: '/dashboard/monitoring/errors/performance' },
+    //       // ]
+    //     },
+    //   ]
+    // },
     {
       title: "Communication & Logs",
       items: [

@@ -12,7 +12,7 @@ interface PropertyDetails {
   age: string
   parking: string
   facing: string
-  reraNumber: string
+  reraNumber?: string
 }
 
 interface PropertyEditModalProps {

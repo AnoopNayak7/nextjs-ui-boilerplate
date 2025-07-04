@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { MapPin, Plus, ChevronRight, Edit2, Trash2 } from 'lucide-react'
-import axios from '@/lib/axios'
+import { locationsApi } from '@/lib/api'
 
 interface City {
   name: string
@@ -47,8 +47,8 @@ export default function LocationsPage() {
 
   const fetchLocationData = async () => {
     try {
-      const response = await axios.get('/locations')
-      setLocationData(response.data)
+      const data = await locationsApi.getAll()
+      setLocationData(data)
       setIsLoading(false)
     } catch (err) {
       setError('Failed to fetch location data')
@@ -58,7 +58,7 @@ export default function LocationsPage() {
 
   const handleAddState = async () => {
     try {
-      await axios.post('/locations/states', { stateName: newStateName })
+      await locationsApi.addState(newStateName)
       fetchLocationData()
       setIsAddStateModalOpen(false)
       setNewStateName('')
@@ -71,7 +71,7 @@ export default function LocationsPage() {
     if (!selectedState) return
 
     try {
-      await axios.post(`/locations/states/${selectedState}/cities`, newCityData)
+      await locationsApi.addCity(selectedState, newCityData)
       fetchLocationData()
       setIsAddCityModalOpen(false)
       setNewCityData({
